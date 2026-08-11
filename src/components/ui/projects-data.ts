@@ -66,7 +66,7 @@ export const PROJECTS_DATA: Project[] = [
     description: "Proof-of-Progress decentralized platform built on Solana for verified achievements.",
     githubUrl: "https://github.com/iamkaifyyy/lumina.git",
     liveUrl: "https://lumina.example.com",
-    videoUrl: "/recordings/lumina.mp4",
+    videoUrl: "/recordings/lumina.mov",
     tag: "Solana Protocol",
     tech: ["Solana", "Solidity", "React", "Wagmi", "Tailwind CSS"],
   },
