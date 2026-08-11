@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, Download, ExternalLink } from "lucide-react";
 
 export default function ResumePage() {
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors">
-      <main className="flex-1 w-full max-w-4xl mx-auto px-6 py-6 md:py-10 flex flex-col">
+      <main className="flex-1 w-full max-w-4xl mx-auto px-6 py-6 md:py-10 flex flex-col items-center">
         {/* Top Navigation & Action Bar */}
         <div className="w-full flex items-center justify-between gap-4 mb-6 flex-wrap">
           <Link
@@ -40,12 +41,15 @@ export default function ResumePage() {
           </div>
         </div>
 
-        {/* PDF View Container */}
-        <div className="w-full max-w-2xl mx-auto h-[82vh] md:h-[88vh] max-h-[880px] rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-sm bg-zinc-100 dark:bg-zinc-900">
-          <iframe
-            src="/kaify.pdf"
-            className="w-full h-full border-none"
-            title="Kaify Resume PDF"
+        {/* Crisp Document Display - Zero Toolbar Overlays */}
+        <div className="w-full max-w-2xl mx-auto rounded-2xl overflow-hidden border border-zinc-200/80 dark:border-zinc-800/80 shadow-lg bg-white dark:bg-zinc-900 relative group">
+          <Image
+            src="/kaify-page-1.png"
+            alt="Mohd Kaif Resume"
+            width={1200}
+            height={1697}
+            priority
+            className="w-full h-auto object-contain select-none"
           />
         </div>
       </main>
