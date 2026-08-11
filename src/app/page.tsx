@@ -9,6 +9,7 @@ import { TextEffect } from "@/components/ui/text-effect";
 import { ProjectsSection } from "@/components/ui/projects-section";
 import { GithubGraph } from "@/components/ui/github-graph";
 import { TechStackSection } from "@/components/ui/tech-stack-section";
+import { Sparkles } from "lucide-react";
 
 export default function Home() {
   const [isFading, setIsFading] = useState(false);
@@ -68,18 +69,21 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-start pt-16 md:pt-24 pb-24 px-4 md:px-8 relative max-w-2xl mx-auto space-y-10 md:space-y-12 [zoom:0.92] origin-top">
+    <main className="min-h-screen flex flex-col items-center justify-start pt-16 md:pt-24 pb-24 px-4 md:px-8 relative max-w-2xl mx-auto space-y-10 md:space-y-12 [zoom:0.95] origin-top">
       <div className="flex items-start justify-center gap-6 md:gap-10">
         <div className="flex flex-col items-start max-w-md">
-          <div className="flex items-baseline gap-3">
-            <TextEffect
-              as="h1"
-              per="char"
-              preset="fade-in-blur"
-              className="font-bold text-3xl md:text-4xl tracking-tight text-zinc-900 dark:text-zinc-100"
-            >
-              Kaify
-            </TextEffect>
+          <div className="flex items-center gap-3">
+            <div className="flex items-baseline gap-2">
+              <TextEffect
+                as="h1"
+                per="char"
+                preset="fade-in-blur"
+                className="font-bold text-3xl md:text-4xl tracking-tight text-zinc-900 dark:text-zinc-100"
+              >
+                Kaify
+              </TextEffect>
+              <Sparkles className="w-5 h-5 text-amber-400 dark:text-amber-300 animate-pulse inline-block" />
+            </div>
             <div className={`transition-all duration-700 ${isFading ? "opacity-0 -translate-x-2 pointer-events-none" : ""}`}>
               <TextEffect
                 as="span"

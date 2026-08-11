@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence, type Variants } from 'motion/react'
+import { motion, AnimatePresence } from 'motion/react'
 import { X, ExternalLink } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { PROJECTS, DESIGNS } from './projects-data'
@@ -20,7 +20,6 @@ import {
 
 function ProjectVideo({ src }: { src: string }) {
   const [isLoading, setIsLoading] = useState(true)
-  const [isVideoReady, setIsVideoReady] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const modalVideoRef = useRef<HTMLVideoElement>(null)
 
@@ -32,16 +31,6 @@ function ProjectVideo({ src }: { src: string }) {
   useEffect(() => {
     applySlowPlayback()
   }, [src])
-
-  useEffect(() => {
-    const minLoadingTimeout = setTimeout(() => {
-      if (isVideoReady) {
-        setIsLoading(false)
-      }
-    }, 400)
-
-    return () => clearTimeout(minLoadingTimeout)
-  }, [isVideoReady])
 
   return (
     <MorphingDialog
@@ -55,40 +44,27 @@ function ProjectVideo({ src }: { src: string }) {
         <motion.div
           whileHover={{ scale: 1.015 }}
           transition={{ duration: 0.2 }}
-          className="relative aspect-video w-full overflow-hidden rounded-xl"
+          className="relative aspect-video w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-900"
         >
-          <AnimatePresence mode="wait">
-            {isLoading && (
-              <motion.div
-                initial={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="absolute inset-0 z-10"
-              >
-                <Skeleton className="h-full w-full rounded-xl" />
-              </motion.div>
-            )}
-          </AnimatePresence>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isLoading ? 0 : 1 }}
-            transition={{ duration: 0.4 }}
-          >
-            <video
-              ref={videoRef}
-              src={src}
-              autoPlay
-              loop
-              muted
-              playsInline
-              onLoadedData={() => {
-                setIsVideoReady(true)
-                applySlowPlayback()
-              }}
-              onLoadedMetadata={applySlowPlayback}
-              className="aspect-video w-full cursor-zoom-in rounded-xl object-cover"
-            />
-          </motion.div>
+          {isLoading && (
+            <div className="absolute inset-0 z-10">
+              <Skeleton className="h-full w-full rounded-xl" />
+            </div>
+          )}
+          <video
+            ref={videoRef}
+            src={src}
+            autoPlay
+            loop
+            muted
+            playsInline
+            onLoadedData={() => {
+              setIsLoading(false)
+              applySlowPlayback()
+            }}
+            onLoadedMetadata={applySlowPlayback}
+            className="aspect-video w-full cursor-zoom-in rounded-xl object-cover"
+          />
         </motion.div>
       </MorphingDialogTrigger>
 
@@ -141,11 +117,10 @@ function ProjectImage({ src }: { src: string }) {
           transition={{ duration: 0.2 }}
           className="relative aspect-video w-full overflow-hidden rounded-xl bg-black"
         >
-          <motion.img
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={src}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4 }}
+            alt="Project Showcase"
             className="aspect-video w-full rounded-xl object-contain bg-black cursor-zoom-in"
           />
         </motion.div>
@@ -184,42 +159,11 @@ function ProjectImage({ src }: { src: string }) {
 /*                           MAIN PROJECTS & DESIGN SECTION                   */
 /* -------------------------------------------------------------------------- */
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-}
-
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 15, filter: 'blur(4px)' },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 0.35, ease: 'easeOut' },
-  },
-  exit: {
-    opacity: 0,
-    y: -15,
-    filter: 'blur(4px)',
-    transition: { duration: 0.25 },
-  },
-}
-
 export function ProjectsSection() {
   const [activeTab, setActiveTab] = useState<'projects' | 'design'>('projects')
 
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
-      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-      transition={{ duration: 0.4 }}
-      className="w-full max-w-xl mx-auto px-4 md:px-0"
-    >
+    <section className="w-full max-w-xl mx-auto px-4 md:px-0">
       {/* Category Tab Buttons */}
       <div className="flex justify-center gap-8 mb-6">
         <button
@@ -236,7 +180,6 @@ export function ProjectsSection() {
             <motion.div
               layoutId="activeTab"
               className="absolute -bottom-2 left-0 right-0 h-0.5 bg-zinc-900 dark:bg-zinc-50"
-              initial={false}
               transition={{ type: 'spring', stiffness: 400, damping: 30 }}
             />
           )}
@@ -245,7 +188,7 @@ export function ProjectsSection() {
         <button
           onClick={() => setActiveTab('design')}
           className={cn(
-            'text-lg font-medium relative cursor-pointer transition-colors',
+            'text-base font-medium relative cursor-pointer transition-colors',
             activeTab === 'design'
               ? 'text-zinc-900 dark:text-zinc-50'
               : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50'
@@ -256,7 +199,6 @@ export function ProjectsSection() {
             <motion.div
               layoutId="activeTab"
               className="absolute -bottom-2 left-0 right-0 h-0.5 bg-zinc-900 dark:bg-zinc-50"
-              initial={false}
               transition={{ type: 'spring', stiffness: 400, damping: 30 }}
             />
           )}
@@ -264,22 +206,21 @@ export function ProjectsSection() {
       </div>
 
       {/* Tab Panels */}
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" initial={false}>
         {/* PROJECTS TAB */}
         {activeTab === 'projects' && (
           <motion.div
             key="projects"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
             className="grid grid-cols-1 gap-6 sm:grid-cols-2"
           >
             {PROJECTS.map((project) => (
               <motion.div
                 key={project.id || project.name}
-                variants={cardVariants}
-                whileHover={{ y: -3 }}
+                whileHover={{ y: -2 }}
                 transition={{ duration: 0.2 }}
                 className="space-y-2 group/card"
               >
@@ -312,10 +253,9 @@ export function ProjectsSection() {
                     </a>
 
                     {project.tag && (
-                      <motion.span
-                        whileHover={{ scale: 1.05 }}
+                      <span
                         className={cn(
-                          'inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset cursor-pointer transition-colors',
+                          'inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset cursor-pointer transition-transform hover:scale-105',
                           project.tag.includes('Grant') &&
                             'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 ring-green-600/20 dark:ring-green-500/30',
                           project.tag === 'Building' &&
@@ -325,7 +265,7 @@ export function ProjectsSection() {
                         )}
                       >
                         {project.tag}
-                      </motion.span>
+                      </span>
                     )}
                   </div>
 
@@ -363,17 +303,16 @@ export function ProjectsSection() {
         {activeTab === 'design' && (
           <motion.div
             key="designs"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
             className="grid grid-cols-1 gap-6 sm:grid-cols-2"
           >
             {DESIGNS.map((design) => (
               <motion.div
                 key={design.id || design.name}
-                variants={cardVariants}
-                whileHover={{ y: -3 }}
+                whileHover={{ y: -2 }}
                 transition={{ duration: 0.2 }}
                 className="space-y-2 group/card"
               >
@@ -392,12 +331,9 @@ export function ProjectsSection() {
                       <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
                     </a>
                     {design.tag && (
-                      <motion.span
-                        whileHover={{ scale: 1.05 }}
-                        className="inline-flex items-center rounded-full bg-purple-50 dark:bg-purple-900/30 px-2 py-1 text-xs font-medium text-purple-700 dark:text-purple-300 ring-1 ring-inset ring-purple-600/20 dark:ring-purple-500/30 cursor-pointer"
-                      >
+                      <span className="inline-flex items-center rounded-full bg-purple-50 dark:bg-purple-900/30 px-2 py-1 text-xs font-medium text-purple-700 dark:text-purple-300 ring-1 ring-inset ring-purple-600/20 dark:ring-purple-500/30 cursor-pointer transition-transform hover:scale-105">
                         {design.tag}
-                      </motion.span>
+                      </span>
                     )}
                   </div>
                   <p className="text-base text-zinc-600 dark:text-zinc-400 mt-2">
@@ -409,6 +345,6 @@ export function ProjectsSection() {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.section>
+    </section>
   )
 }
