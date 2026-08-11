@@ -128,7 +128,7 @@ export function ProjectsSection() {
       initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       transition={{ duration: 0.3 }}
-      className="w-full max-w-2xl mx-auto my-12 -mt-12 px-4 md:px-0"
+      className="w-full max-w-xl mx-auto my-12 -mt-12 px-4 md:px-0"
     >
       {/* Tab Switcher Header */}
       <div className="flex items-center gap-8 mb-8 border-b border-zinc-200/60 dark:border-zinc-800/60 pb-2">
