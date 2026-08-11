@@ -15,7 +15,22 @@ import { Sparkles } from "lucide-react";
 export default function Home() {
   const [isFading, setIsFading] = useState(false);
   const [isInitialFlipped, setIsInitialFlipped] = useState(false);
+  const [isAtBottom, setIsAtBottom] = useState(false);
   const hobbiesRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const bottomThreshold = 220;
+      const isBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - bottomThreshold;
+      setIsAtBottom(isBottom);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const showGifTimer = setTimeout(() => {
@@ -234,7 +249,13 @@ export default function Home() {
       <TechStackSection />
       <FooterSection />
 
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+      <div
+        className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${
+          isAtBottom
+            ? "opacity-0 translate-y-6 pointer-events-none"
+            : "opacity-100 translate-y-0"
+        }`}
+      >
         <DockDemo />
       </div>
     </main>
