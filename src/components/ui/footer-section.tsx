@@ -8,7 +8,7 @@ export function FooterSection() {
   };
 
   return (
-    <footer className="w-full max-w-2xl mx-auto pt-16 pb-28 border-t border-zinc-200/60 dark:border-zinc-800/60 flex flex-col gap-6 text-zinc-600 dark:text-zinc-400 font-sans text-xs md:text-sm">
+    <footer className="w-full max-w-2xl mx-auto mt-auto pt-10 pb-6 border-t border-zinc-200/60 dark:border-zinc-800/60 flex flex-col gap-5 text-zinc-600 dark:text-zinc-400 font-sans text-xs md:text-sm">
       {/* Top Row: Creator & Back to Top */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-2">

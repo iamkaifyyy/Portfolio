@@ -245,12 +245,14 @@ export function ProjectsSection() {
                     {project.tag && (
                       <span
                         className={cn(
-                          'inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset cursor-pointer transition-transform hover:scale-105',
-                          project.tag.includes('Grant') &&
-                            'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 ring-green-600/20 dark:ring-green-500/30',
-                          project.tag === 'Building' &&
-                            'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 ring-blue-600/20 dark:ring-blue-500/30',
-                          !project.tag.includes('Grant') && project.tag !== 'Building' &&
+                          'inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset cursor-pointer',
+                          (project.tag.includes('Grant') || project.tag.includes('1st Prize')) &&
+                            'bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 ring-emerald-600/20 dark:ring-emerald-500/30',
+                          (project.tag === 'Building' || project.tag.includes('AI') || project.tag.includes('Engine') || project.tag.includes('MCP')) &&
+                            'bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 ring-purple-600/20 dark:ring-purple-500/30',
+                          (project.tag.includes('Solana') || project.tag.includes('EVM') || project.tag.includes('Web3')) &&
+                            'bg-cyan-50 dark:bg-cyan-950/70 text-cyan-700 dark:text-cyan-300 ring-cyan-600/20 dark:ring-cyan-500/30',
+                          !project.tag.includes('Grant') && !project.tag.includes('1st Prize') && project.tag !== 'Building' && !project.tag.includes('AI') && !project.tag.includes('Engine') && !project.tag.includes('Solana') && !project.tag.includes('EVM') && !project.tag.includes('Web3') &&
                             'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 ring-zinc-500/20'
                         )}
                       >

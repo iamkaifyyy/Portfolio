@@ -85,7 +85,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-start pt-16 md:pt-24 pb-24 px-4 md:px-8 relative max-w-2xl mx-auto space-y-10 md:space-y-12 [zoom:0.95] origin-top">
+    <main className="min-h-screen flex flex-col justify-between items-center pt-16 md:pt-24 pb-12 px-4 md:px-8 relative max-w-2xl mx-auto space-y-10 md:space-y-12 [zoom:0.95] origin-top">
       <div className="flex items-start justify-center gap-6 md:gap-10">
         <div className="flex flex-col items-start max-w-md">
           <div className="flex items-center gap-3">
@@ -247,17 +247,19 @@ export default function Home() {
       <ProjectsSection />
       <GithubGraph />
       <TechStackSection />
-      <FooterSection />
 
+      {/* Dock: Floating while scrolling, sticks above footer when at the bottom */}
       <div
-        className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${
+        className={`flex justify-center transition-all duration-500 ${
           isAtBottom
-            ? "opacity-0 translate-y-6 pointer-events-none"
-            : "opacity-100 translate-y-0"
+            ? "relative bottom-0 left-0 translate-x-0 my-4 z-10 opacity-100"
+            : "fixed bottom-6 left-1/2 -translate-x-1/2 z-50 opacity-100"
         }`}
       >
         <DockDemo />
       </div>
+
+      <FooterSection />
     </main>
   );
 }
