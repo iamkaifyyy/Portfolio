@@ -218,14 +218,14 @@ export function ProjectsSection() {
       initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
       animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
       transition={{ duration: 0.4 }}
-      className="w-full max-w-2xl mx-auto px-4 md:px-0"
+      className="w-full max-w-xl mx-auto px-4 md:px-0"
     >
       {/* Category Tab Buttons */}
-      <div className="flex justify-center gap-8 mb-8">
+      <div className="flex justify-center gap-8 mb-6">
         <button
           onClick={() => setActiveTab('projects')}
           className={cn(
-            'text-lg font-medium relative cursor-pointer transition-colors',
+            'text-base font-medium relative cursor-pointer transition-colors',
             activeTab === 'projects'
               ? 'text-zinc-900 dark:text-zinc-50'
               : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50'
