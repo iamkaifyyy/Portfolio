@@ -16,9 +16,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Kaify — Full-Stack Web2 & Web3 Developer",
+  title: "Kaify",
   description:
     "Portfolio of Kaify — Full-stack Web2 & Web3 developer building AI-powered products at Onewave Studio, crafting high-performance dApps and smart contracts on Solana & EVM chains.",
+  icons: {
+    icon: "/asta.jpeg",
+    shortcut: "/asta.jpeg",
+    apple: "/asta.jpeg",
+  },
 };
 
 import { CustomCursor } from "@/components/ui/custom-cursor";
