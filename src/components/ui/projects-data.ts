@@ -9,6 +9,7 @@ export type Project = {
   imageUrl?: string;
   tag?: string;
   tech?: string[];
+  type?: "video" | "image";
 };
 
 export const PROJECTS_DATA: Project[] = [
@@ -32,7 +33,7 @@ export const PROJECTS_DATA: Project[] = [
     githubUrl: "https://github.com/iamkaifyyy/RescueNet.git",
     liveUrl: "https://rescue-net-pi.vercel.app",
     videoUrl: "/recordings/rescuenet.mp4",
-    tag: "🏆 1st Prize Winner",
+    tag: "$5000 Grant Recipient",
     tech: ["React.js", "TypeScript", "Express.js", "PostgreSQL", "MapLibre GL"],
   },
   {
@@ -43,7 +44,7 @@ export const PROJECTS_DATA: Project[] = [
     githubUrl: "https://github.com/iamkaifyyy/DiagnosLAB.git",
     liveUrl: "https://diagnos-lab.vercel.app",
     videoUrl: "/recordings/trustlab.mp4",
-    tag: "🏆 1st Prize Winner",
+    tag: "$3000 Grant Recipient",
     tech: ["React.js", "Node.js", "Express.js", "MongoDB", "TypeScript"],
   },
 
@@ -56,7 +57,7 @@ export const PROJECTS_DATA: Project[] = [
     githubUrl: "https://github.com/iamkaifyyy/Odyssey.git",
     liveUrl: "https://odyssey-1yjh.vercel.app",
     videoUrl: "/recordings/odyssey.mp4",
-    tag: "Solana & EVM",
+    tag: "$4000 Grant Recipient",
     tech: ["Solana", "Ethereum", "React", "TypeScript", "Ethers.js"],
   },
   {
@@ -67,7 +68,7 @@ export const PROJECTS_DATA: Project[] = [
     githubUrl: "https://github.com/iamkaifyyy/lumina.git",
     liveUrl: "https://lumina.example.com",
     videoUrl: "/recordings/lumina.mov",
-    tag: "Solana Protocol",
+    tag: "Building",
     tech: ["Solana", "Solidity", "React", "Wagmi", "Tailwind CSS"],
   },
   {
@@ -78,7 +79,30 @@ export const PROJECTS_DATA: Project[] = [
     githubUrl: "https://github.com/iamkaifyyy/onewavestudio.git",
     liveUrl: "https://onewavestudio.vercel.app/",
     videoUrl: "/recordings/onewavestudio.mp4",
-    tag: "Web3 Studio",
+    tag: "Building",
     tech: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+  },
+];
+
+export const DESIGNS_DATA: Project[] = [
+  {
+    id: "design-zone",
+    name: "Zone",
+    category: "web3",
+    description: "Secure your code ownership on the Solana blockchain. Protect IP and build a verifiable portfolio.",
+    githubUrl: "https://github.com/iamkaifyyy",
+    liveUrl: "https://onewavestudio.vercel.app/",
+    videoUrl: "/recordings/Zone.mp4",
+    tag: "Motion",
+  },
+  {
+    id: "design-perplexity",
+    name: "Perplexity",
+    category: "web2",
+    description: "Better design and landing page for perplexity made with figma",
+    githubUrl: "https://github.com/iamkaifyyy",
+    liveUrl: "https://onewavestudio.vercel.app/",
+    videoUrl: "/recordings/Perplexity.mp4",
+    tag: "Figma",
   },
 ];
