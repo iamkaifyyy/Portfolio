@@ -23,6 +23,7 @@ export const metadata: Metadata = {
 
 import { CustomCursor } from "@/components/ui/custom-cursor";
 import { LenisProvider } from "@/components/LenisProvider";
+import { ScrollProgress } from "@/components/ui/scroll-progress";
 
 export default function RootLayout({
   children,
@@ -36,6 +37,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-white text-zinc-900">
         <LenisProvider>
+          <ScrollProgress />
           <CustomCursor />
           {children}
         </LenisProvider>
