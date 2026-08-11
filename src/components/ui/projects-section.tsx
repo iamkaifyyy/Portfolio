@@ -33,7 +33,7 @@ export function ProjectsSection() {
               : "text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300"
           }`}
         >
-          Web2 Projects
+          Products
           {activeTab === "web2" && (
             <motion.div
               layoutId="activeTabUnderline"
@@ -51,7 +51,7 @@ export function ProjectsSection() {
               : "text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300"
           }`}
         >
-          Web3 Projects
+          Web3
           {activeTab === "web3" && (
             <motion.div
               layoutId="activeTabUnderline"

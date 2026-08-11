@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { createTimeline, stagger, splitText } from "animejs";
 import { DockDemo } from "@/components/ui/dock-demo";
@@ -127,14 +128,12 @@ export default function Home() {
 
           {}
           <div className="mt-10 flex items-center gap-4 flex-wrap">
-            <a
-              href="/resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/resume"
               className="px-4 py-1.5 border border-black dark:border-white bg-black text-white dark:bg-zinc-100 dark:text-zinc-900 text-xs md:text-sm font-medium rounded-none inline-flex items-center gap-1.5 cursor-pointer transition-colors hover:bg-zinc-800 dark:hover:bg-zinc-200"
             >
               Resume 📄
-            </a>
+            </Link>
             <a
               href="mailto:mkaifm728@gmail.com"
               className="px-4 py-1.5 border border-blue-600 bg-blue-600 text-white text-xs md:text-sm font-medium rounded-none inline-flex items-center gap-1.5 cursor-pointer transition-colors hover:bg-blue-700"
@@ -143,7 +142,7 @@ export default function Home() {
             </a>
           </div>
 
-          {/* Social Links: Transparent Liquid Glass UI Style */}
+          {}
           <div className="mt-5 flex items-center gap-2.5 flex-wrap">
             <a
               href="https://www.github.com/iamkaifyyy"
@@ -199,7 +198,7 @@ export default function Home() {
               isInitialFlipped ? "[transform:rotateY(180deg)]" : ""
             }`}
           >
-            {/* Front Face: me.jpeg */}
+            {}
             <div className="absolute inset-1 rounded-xl overflow-hidden bg-white [backface-visibility:hidden]">
               <Image
                 src="/me.jpeg"
@@ -210,7 +209,7 @@ export default function Home() {
               />
             </div>
 
-            {/* Back Face: asta.gif */}
+            {}
             <div className="absolute inset-1 rounded-xl overflow-hidden bg-white [backface-visibility:hidden] [transform:rotateY(180deg)]">
               <Image
                 src="/asta.gif"
