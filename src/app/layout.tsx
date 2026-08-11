@@ -29,6 +29,7 @@ export const metadata: Metadata = {
 import { CustomCursor } from "@/components/ui/custom-cursor";
 import { LenisProvider } from "@/components/LenisProvider";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
+import { StickyFooterBar } from "@/components/ui/sticky-footer-bar";
 
 export default function RootLayout({
   children,
@@ -45,6 +46,7 @@ export default function RootLayout({
           <ScrollProgress />
           <CustomCursor />
           {children}
+          <StickyFooterBar />
         </LenisProvider>
       </body>
     </html>

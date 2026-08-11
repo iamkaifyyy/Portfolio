@@ -67,13 +67,6 @@ export function FooterSection() {
         </a>
       </div>
 
-      {/* Bottom Row: Copyright & Location */}
-      <div className="flex items-center justify-between gap-4 flex-wrap pt-4 border-t border-zinc-200/40 dark:border-zinc-800/40 text-xs text-zinc-400 dark:text-zinc-500">
-        <p className="flex items-center gap-1">
-          Crafted with Next.js & Tailwind CSS
-        </p>
-        <p>© {new Date().getFullYear()} Kaify. All rights reserved.</p>
-      </div>
     </footer>
   );
 }
