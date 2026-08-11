@@ -9,11 +9,28 @@ import { TextEffect } from "@/components/ui/text-effect";
 import { ProjectsSection } from "@/components/ui/projects-section";
 import { GithubGraph } from "@/components/ui/github-graph";
 import { TechStackSection } from "@/components/ui/tech-stack-section";
+import { FooterSection } from "@/components/ui/footer-section";
+import { Sparkles } from "lucide-react";
 
 export default function Home() {
   const [isFading, setIsFading] = useState(false);
   const [isInitialFlipped, setIsInitialFlipped] = useState(false);
+  const [isAtBottom, setIsAtBottom] = useState(false);
   const hobbiesRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const bottomThreshold = 220;
+      const isBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - bottomThreshold;
+      setIsAtBottom(isBottom);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const showGifTimer = setTimeout(() => {
@@ -68,18 +85,21 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-start pt-24 md:pt-36 px-6 md:px-12 relative max-w-4xl mx-auto">
+    <main className="min-h-screen flex flex-col justify-between items-center pt-16 md:pt-24 pb-12 px-4 md:px-8 relative max-w-2xl mx-auto space-y-10 md:space-y-12 [zoom:0.95] origin-top">
       <div className="flex items-start justify-center gap-6 md:gap-10">
         <div className="flex flex-col items-start max-w-md">
-          <div className="flex items-baseline gap-3">
-            <TextEffect
-              as="h1"
-              per="char"
-              preset="fade-in-blur"
-              className="font-bold text-3xl md:text-4xl tracking-tight text-zinc-900 dark:text-zinc-100"
-            >
-              Kaify
-            </TextEffect>
+          <div className="flex items-center gap-3">
+            <div className="flex items-baseline gap-2">
+              <TextEffect
+                as="h1"
+                per="char"
+                preset="fade-in-blur"
+                className="font-bold text-3xl md:text-4xl tracking-tight text-zinc-900 dark:text-zinc-100"
+              >
+                Kaify
+              </TextEffect>
+              <Sparkles className="w-5 h-5 text-amber-400 dark:text-amber-300 animate-pulse inline-block" />
+            </div>
             <div className={`transition-all duration-700 ${isFading ? "opacity-0 -translate-x-2 pointer-events-none" : ""}`}>
               <TextEffect
                 as="span"
@@ -228,9 +248,18 @@ export default function Home() {
       <GithubGraph />
       <TechStackSection />
 
-      <div className="fixed bottom-6 z-50">
+      {/* Dock: Floating while scrolling, sticks above footer when at the bottom */}
+      <div
+        className={`flex justify-center transition-all duration-500 ${
+          isAtBottom
+            ? "relative bottom-0 left-0 translate-x-0 my-4 z-10 opacity-100"
+            : "fixed bottom-6 left-1/2 -translate-x-1/2 z-50 opacity-100"
+        }`}
+      >
         <DockDemo />
       </div>
+
+      <FooterSection />
     </main>
   );
 }

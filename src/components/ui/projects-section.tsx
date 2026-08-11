@@ -1,142 +1,342 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { ExternalLink } from "lucide-react";
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
+import { X, ExternalLink } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { PROJECTS, DESIGNS } from './projects-data'
+import {
+  MorphingDialog,
+  MorphingDialogTrigger,
+  MorphingDialogContent,
+  MorphingDialogClose,
+  MorphingDialogContainer,
+} from '@/components/ui/morphing-dialog'
 
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  category: "web2" | "web3";
-  tags: string[];
-  demoUrl?: string;
-  githubUrl?: string;
-}
+/* -------------------------------------------------------------------------- */
+/*                               PROJECT MEDIA COMPONENTS                      */
+/* -------------------------------------------------------------------------- */
 
-const projects: Project[] = [];
+function ProjectVideo({ src }: { src: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const modalVideoRef = useRef<HTMLVideoElement>(null)
 
-export function ProjectsSection() {
-  const [activeTab, setActiveTab] = useState<"web2" | "web3">("web2");
+  const applySlowPlayback = () => {
+    if (videoRef.current) videoRef.current.playbackRate = 0.3
+    if (modalVideoRef.current) modalVideoRef.current.playbackRate = 0.3
+  }
 
-  const filteredProjects = projects.filter((p) => p.category === activeTab);
+  useEffect(() => {
+    applySlowPlayback()
+  }, [src])
 
   return (
-    <section className="w-full mt-12 pb-24">
-      {/* Tab Switcher */}
-      <div className="max-w-xs mx-auto flex items-center justify-center gap-8 border-b border-zinc-200 dark:border-zinc-800 mb-8 pb-1">
-        <button
-          onClick={() => setActiveTab("web2")}
-          className={`relative pb-3 text-sm md:text-base font-semibold transition-colors cursor-pointer ${
-            activeTab === "web2"
-              ? "text-zinc-900 dark:text-zinc-100"
-              : "text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300"
-          }`}
+    <MorphingDialog
+      transition={{
+        type: 'spring',
+        bounce: 0,
+        duration: 0.35,
+      }}
+    >
+      <MorphingDialogTrigger>
+        <motion.div
+          whileHover={{ scale: 1.01 }}
+          transition={{ duration: 0.2 }}
+          className="relative aspect-video w-full overflow-hidden rounded-xl"
         >
-          Products
-          {activeTab === "web2" && (
+          <video
+            ref={videoRef}
+            src={src}
+            autoPlay
+            loop
+            muted
+            playsInline
+            onLoadedData={applySlowPlayback}
+            onLoadedMetadata={applySlowPlayback}
+            className="aspect-video w-full cursor-zoom-in rounded-xl object-cover"
+          />
+        </motion.div>
+      </MorphingDialogTrigger>
+
+      {/* Fullscreen Expanded Video Modal */}
+      <MorphingDialogContainer>
+        <MorphingDialogContent className="relative aspect-video rounded-2xl p-1 bg-black/90 shadow-2xl">
+          <video
+            ref={modalVideoRef}
+            src={src}
+            autoPlay
+            loop
+            muted
+            playsInline
+            onLoadedMetadata={applySlowPlayback}
+            onLoadedData={applySlowPlayback}
+            className="aspect-video h-[50vh] w-full rounded-xl md:h-[70vh] object-cover"
+          />
+        </MorphingDialogContent>
+        <MorphingDialogClose
+          className="fixed top-6 right-6 h-fit w-fit rounded-full bg-white dark:bg-zinc-800 p-2 shadow-lg hover:scale-110 active:scale-95 transition-transform border border-zinc-200 dark:border-zinc-700"
+          variants={{
+            initial: { opacity: 0, scale: 0.8 },
+            animate: {
+              opacity: 1,
+              scale: 1,
+              transition: { delay: 0.2, duration: 0.15 },
+            },
+            exit: { opacity: 0, scale: 0.8, transition: { duration: 0.1 } },
+          }}
+        >
+          <X className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
+        </MorphingDialogClose>
+      </MorphingDialogContainer>
+    </MorphingDialog>
+  )
+}
+
+function ProjectImage({ src }: { src: string }) {
+  return (
+    <MorphingDialog
+      transition={{
+        type: 'spring',
+        bounce: 0,
+        duration: 0.35,
+      }}
+    >
+      <MorphingDialogTrigger>
+        <motion.div
+          whileHover={{ scale: 1.01 }}
+          transition={{ duration: 0.2 }}
+          className="relative aspect-video w-full overflow-hidden rounded-xl bg-black"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={src}
+            alt="Project Showcase"
+            className="aspect-video w-full rounded-xl object-contain bg-black cursor-zoom-in"
+          />
+        </motion.div>
+      </MorphingDialogTrigger>
+
+      {/* Fullscreen Expanded Image Modal */}
+      <MorphingDialogContainer>
+        <MorphingDialogContent className="relative aspect-video rounded-2xl p-1 bg-black/90 shadow-2xl">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={src}
+            alt="Project Showcase"
+            className="aspect-video h-[50vh] w-full rounded-xl md:h-[70vh] object-contain bg-black"
+          />
+        </MorphingDialogContent>
+        <MorphingDialogClose
+          className="fixed top-6 right-6 h-fit w-fit rounded-full bg-white dark:bg-zinc-800 p-2 shadow-lg hover:scale-110 active:scale-95 transition-transform border border-zinc-200 dark:border-zinc-700"
+          variants={{
+            initial: { opacity: 0, scale: 0.8 },
+            animate: {
+              opacity: 1,
+              scale: 1,
+              transition: { delay: 0.2, duration: 0.15 },
+            },
+            exit: { opacity: 0, scale: 0.8, transition: { duration: 0.1 } },
+          }}
+        >
+          <X className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
+        </MorphingDialogClose>
+      </MorphingDialogContainer>
+    </MorphingDialog>
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*                           MAIN PROJECTS & DESIGN SECTION                   */
+/* -------------------------------------------------------------------------- */
+
+export function ProjectsSection() {
+  const [activeTab, setActiveTab] = useState<'projects' | 'design'>('projects')
+
+  return (
+    <section className="w-full max-w-xl mx-auto px-4 md:px-0">
+      {/* Category Tab Buttons */}
+      <div className="flex justify-center gap-8 mb-6">
+        <button
+          onClick={() => setActiveTab('projects')}
+          className={cn(
+            'text-base font-medium relative cursor-pointer transition-colors',
+            activeTab === 'projects'
+              ? 'text-zinc-900 dark:text-zinc-50'
+              : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50'
+          )}
+        >
+          Projects
+          {activeTab === 'projects' && (
             <motion.div
-              layoutId="activeTabUnderline"
-              className="absolute bottom-0 left-0 right-0 h-0.5 bg-zinc-900 dark:bg-zinc-100 rounded-full"
-              transition={{ type: "spring", stiffness: 500, damping: 35 }}
+              layoutId="activeTab"
+              className="absolute -bottom-2 left-0 right-0 h-0.5 bg-zinc-900 dark:bg-zinc-50"
+              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
             />
           )}
         </button>
 
         <button
-          onClick={() => setActiveTab("web3")}
-          className={`relative pb-3 text-sm md:text-base font-semibold transition-colors cursor-pointer ${
-            activeTab === "web3"
-              ? "text-zinc-900 dark:text-zinc-100"
-              : "text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300"
-          }`}
+          onClick={() => setActiveTab('design')}
+          className={cn(
+            'text-base font-medium relative cursor-pointer transition-colors',
+            activeTab === 'design'
+              ? 'text-zinc-900 dark:text-zinc-50'
+              : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50'
+          )}
         >
-          Web3
-          {activeTab === "web3" && (
+          Design
+          {activeTab === 'design' && (
             <motion.div
-              layoutId="activeTabUnderline"
-              className="absolute bottom-0 left-0 right-0 h-0.5 bg-zinc-900 dark:bg-zinc-100 rounded-full"
-              transition={{ type: "spring", stiffness: 500, damping: 35 }}
+              layoutId="activeTab"
+              className="absolute -bottom-2 left-0 right-0 h-0.5 bg-zinc-900 dark:bg-zinc-50"
+              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
             />
           )}
         </button>
       </div>
 
-      {/* Projects Grid */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -12 }}
-          transition={{ duration: 0.2 }}
-        >
-          {filteredProjects.length === 0 ? (
-            <div className="py-12 text-center text-xs md:text-sm text-zinc-400 dark:text-zinc-500 font-medium">
-              No {activeTab === "web2" ? "Web2" : "Web3"} projects added yet.
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {filteredProjects.map((project) => (
+      {/* Tab Panels */}
+      <AnimatePresence mode="wait" initial={false}>
+        {/* PROJECTS TAB */}
+        {activeTab === 'projects' && (
+          <motion.div
+            key="projects"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2"
+          >
+            {PROJECTS.map((project) => (
+              <motion.div
+                key={project.id || project.name}
+                whileHover={{ y: -2 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-2 group/card"
+              >
+                {/* Media Outer Box */}
                 <div
-                  key={project.id}
-                  className="group relative flex flex-col justify-between p-5 rounded-2xl bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200/80 dark:border-zinc-800 transition-all duration-300 hover:border-zinc-400 dark:hover:border-zinc-700 hover:shadow-sm"
+                  className={cn(
+                    'relative rounded-2xl p-1 ring-1 ring-zinc-200/50 ring-inset dark:ring-zinc-800/50 transition-all duration-300 group-hover/card:ring-zinc-300 dark:group-hover/card:ring-zinc-700',
+                    project.tag?.includes('Grant') && 'ring-emerald-500/40 dark:ring-emerald-500/40',
+                    project.tag === 'Building' && 'ring-blue-500/40 dark:ring-blue-500/40'
+                  )}
                 >
-                  <div>
-                    <div className="flex items-center justify-between gap-2 mb-2">
-                      <h3 className="font-semibold text-base md:text-lg text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                        {project.title}
-                      </h3>
-                      <div className="flex items-center gap-2">
-                        {project.githubUrl && (
-                          <a
-                            href={project.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors"
-                            title="GitHub Repository"
-                          >
-                            <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                              <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-                            </svg>
-                          </a>
-                        )}
-                        {project.demoUrl && (
-                          <a
-                            href={project.demoUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors"
-                            title="Live Demo"
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                          </a>
-                        )}
-                      </div>
-                    </div>
-
-                    <p className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">
-                      {project.description}
-                    </p>
-                  </div>
-
-                  {/* Tech Tags */}
-                  <div className="flex items-center gap-1.5 flex-wrap pt-2">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-zinc-200/60 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+                  {project.type === 'image' && project.image ? (
+                    <ProjectImage src={project.image} />
+                  ) : (
+                    <ProjectVideo src={project.video || ''} />
+                  )}
                 </div>
-              ))}
-            </div>
-          )}
-        </motion.div>
+
+                {/* Info & Links */}
+                <div className="px-1 pt-1">
+                  <div className="flex items-center gap-3 mb-1 flex-wrap">
+                    <a
+                      className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50"
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {project.name}
+                      <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
+                    </a>
+
+                    {project.tag && (
+                      <span
+                        className={cn(
+                          'inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset cursor-pointer',
+                          (project.tag.includes('Grant') || project.tag.includes('1st Prize')) &&
+                            'bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 ring-emerald-600/20 dark:ring-emerald-500/30',
+                          (project.tag === 'Building' || project.tag.includes('AI') || project.tag.includes('Engine') || project.tag.includes('MCP')) &&
+                            'bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 ring-purple-600/20 dark:ring-purple-500/30',
+                          (project.tag.includes('Solana') || project.tag.includes('EVM') || project.tag.includes('Web3')) &&
+                            'bg-cyan-50 dark:bg-cyan-950/70 text-cyan-700 dark:text-cyan-300 ring-cyan-600/20 dark:ring-cyan-500/30',
+                          !project.tag.includes('Grant') && !project.tag.includes('1st Prize') && project.tag !== 'Building' && !project.tag.includes('AI') && !project.tag.includes('Engine') && !project.tag.includes('Solana') && !project.tag.includes('EVM') && !project.tag.includes('Web3') &&
+                            'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 ring-zinc-500/20'
+                        )}
+                      >
+                        {project.tag}
+                      </span>
+                    )}
+                  </div>
+
+                  <p>
+                    <a
+                      className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50 mr-4 text-sm"
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Github
+                      <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
+                    </a>
+                    <a
+                      className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50 text-sm"
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View <ExternalLink className="inline-block ml-0.5 h-3.5 w-3.5" />
+                      <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
+                    </a>
+                  </p>
+
+                  <p className="text-base text-zinc-600 dark:text-zinc-400 mt-1">
+                    {project.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+
+        {/* DESIGN TAB */}
+        {activeTab === 'design' && (
+          <motion.div
+            key="designs"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2"
+          >
+            {DESIGNS.map((design) => (
+              <motion.div
+                key={design.id || design.name}
+                whileHover={{ y: -2 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-2 group/card"
+              >
+                <div className="relative rounded-2xl p-1 ring-1 ring-zinc-200/50 ring-inset dark:ring-zinc-800/50 transition-all duration-300 group-hover/card:ring-zinc-300 dark:group-hover/card:ring-zinc-700">
+                  <ProjectVideo src={design.video} />
+                </div>
+                <div className="px-1 pt-1">
+                  <div className="flex items-center gap-3 mb-1">
+                    <a
+                      className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50"
+                      href={design.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {design.name}
+                      <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
+                    </a>
+                    {design.tag && (
+                      <span className="inline-flex items-center rounded-full bg-purple-50 dark:bg-purple-900/30 px-2 py-1 text-xs font-medium text-purple-700 dark:text-purple-300 ring-1 ring-inset ring-purple-600/20 dark:ring-purple-500/30 cursor-pointer transition-transform hover:scale-105">
+                        {design.tag}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-base text-zinc-600 dark:text-zinc-400 mt-2">
+                    {design.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
       </AnimatePresence>
     </section>
-  );
+  )
 }
