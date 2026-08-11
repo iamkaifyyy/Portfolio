@@ -48,7 +48,7 @@ export function GitHubContributionsGraph({
 
   if (loading) {
     return (
-      <div className="relative w-full rounded-2xl bg-zinc-50/40 p-6 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50 my-10">
+      <div className="relative w-full max-w-2xl mx-auto rounded-2xl bg-zinc-50/60 p-5 ring-1 ring-zinc-200/60 dark:bg-zinc-900/40 dark:ring-zinc-800/60 my-8">
         <h3 className="mb-4 text-lg font-medium">GitHub Contributions</h3>
         <div className="flex items-center gap-2 mb-4">
           <a
@@ -162,20 +162,20 @@ export function GitHubContributionsGraph({
   };
 
   return (
-    <div className="relative w-full rounded-2xl bg-zinc-50/40 p-6 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50 my-10">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-medium">GitHub Contributions</h3>
+    <div className="relative w-full max-w-2xl mx-auto rounded-2xl bg-zinc-50/60 dark:bg-zinc-900/40 p-5 ring-1 ring-zinc-200/60 dark:ring-zinc-800/60 backdrop-blur-xs my-8 shadow-xs">
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-sm md:text-base font-semibold text-zinc-900 dark:text-zinc-100">GitHub Contributions</h3>
         <a
           href={`https://github.com/${username}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50 text-sm"
+          className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50 text-xs md:text-sm"
         >
           @{username}
           <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
           <svg
-            width="15"
-            height="15"
+            width="14"
+            height="14"
             viewBox="0 0 15 15"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -191,10 +191,10 @@ export function GitHubContributionsGraph({
         </a>
       </div>
 
-      <div className="overflow-x-auto hide-scrollbar -mx-6 px-6 pb-3">
-        <div className="flex gap-0.5 items-end min-w-fit">
+      <div className="overflow-x-auto hide-scrollbar pb-2 flex justify-center">
+        <div className="flex gap-0.5 items-end">
           {/* Day labels */}
-          <div className="flex flex-col gap-0.5 pr-3 pb-2.5 pt-0.5 justify-end left-0 z-10">
+          <div className="flex flex-col gap-0.5 pr-2 pb-2.5 pt-0.5 justify-end">
             <div className="h-3.5"></div>
             {["Sun", "", "Tue", "", "Thu", "", "Sat"].map((day, index) => (
               <div
