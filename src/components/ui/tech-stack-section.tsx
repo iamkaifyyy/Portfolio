@@ -1,121 +1,93 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { Code2, Terminal, Cpu, Layers, Database, Wrench } from "lucide-react";
+import { motion } from "motion/react";
+import { Terminal, Layers, Cpu, Database, Wrench } from "lucide-react";
 
-interface TechCategory {
-  name: string;
-  icon: typeof Code2;
+interface TechGroup {
+  category: string;
+  icon: typeof Terminal;
+  badgeColor: string;
   items: string[];
 }
 
-const TECH_CATEGORIES: TechCategory[] = [
+const TECH_GROUPS: TechGroup[] = [
   {
-    name: "Languages",
+    category: "Languages",
     icon: Terminal,
-    items: ["JavaScript", "TypeScript", "Python", "C++", "SQL", "Solidity", "Rust"],
+    badgeColor: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
+    items: ["TypeScript", "JavaScript", "Python", "C++", "SQL", "Solidity", "Rust"],
   },
   {
-    name: "Frontend",
+    category: "Frontend",
     icon: Layers,
-    items: ["React.js", "Next.js", "HTML5", "CSS3", "Tailwind CSS", "RainbowKit"],
+    badgeColor: "bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20",
+    items: ["React.js", "Next.js", "Tailwind CSS", "HTML5", "CSS3", "RainbowKit"],
   },
   {
-    name: "Backend",
+    category: "Backend",
     icon: Cpu,
+    badgeColor: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
     items: ["Node.js", "Express.js", "FastAPI", "REST APIs", "WebSocket", "JWT", "RBAC"],
   },
   {
-    name: "Web3 & Databases",
+    category: "Web3 & Databases",
     icon: Database,
+    badgeColor: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
     items: ["Solana", "Smart Contracts", "On-chain Attestation", "IPFS", "PostgreSQL", "MongoDB", "Supabase"],
   },
   {
-    name: "DevOps & Tools",
+    category: "DevOps & Tools",
     icon: Wrench,
+    badgeColor: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/20",
     items: ["Docker", "Git", "GitHub Actions", "Linux", "Vercel", "Render", "Postman"],
   },
 ];
 
 export function TechStackSection() {
-  const [activeCategory, setActiveCategory] = useState<string>("All");
-
-  const allItems = TECH_CATEGORIES.flatMap((c) => c.items);
-
   return (
-    <div className="w-full flex flex-col gap-5 mt-10 mb-16">
-      {/* Section Header */}
-      <div className="flex items-center justify-between gap-4 border-b border-zinc-200/80 dark:border-zinc-800/80 pb-3">
-        <div className="flex items-center gap-2.5">
-          <div className="p-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border border-zinc-200/60 dark:border-zinc-700/60">
-            <Code2 className="w-4 h-4 text-emerald-500" />
-          </div>
-          <div>
-            <h2 className="text-base md:text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-              Tech Stack & Toolkit
-            </h2>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">
-              Technologies and frameworks sourced from my resume
-            </p>
-          </div>
-        </div>
+    <div className="w-full flex flex-col gap-4 mt-8 mb-16">
+      <div className="flex items-center justify-between border-b border-zinc-200/60 dark:border-zinc-800/60 pb-3">
+        <h2 className="text-xs font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+          Tech Stack & Toolkit
+        </h2>
       </div>
 
-      {/* Category Pills */}
-      <div className="flex items-center gap-1.5 flex-wrap">
-        <button
-          onClick={() => setActiveCategory("All")}
-          className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-            activeCategory === "All"
-              ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 shadow-xs"
-              : "bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800"
-          }`}
-        >
-          All Tech ({allItems.length})
-        </button>
-
-        {TECH_CATEGORIES.map((cat) => {
-          const Icon = cat.icon;
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {TECH_GROUPS.map((group, idx) => {
+          const Icon = group.icon;
           return (
-            <button
-              key={cat.name}
-              onClick={() => setActiveCategory(cat.name)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
-                activeCategory === cat.name
-                  ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 shadow-xs"
-                  : "bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800"
+            <motion.div
+              key={group.category}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.08, duration: 0.3 }}
+              className={`p-5 rounded-2xl bg-zinc-50/40 dark:bg-zinc-950/40 border border-zinc-200/60 dark:border-zinc-800/60 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all flex flex-col gap-3.5 ${
+                idx === TECH_GROUPS.length - 1 ? "md:col-span-2" : ""
               }`}
             >
-              <Icon className="w-3.5 h-3.5" />
-              {cat.name}
-            </button>
+              <div className="flex items-center gap-2.5">
+                <span className={`p-2 rounded-xl border ${group.badgeColor}`}>
+                  <Icon className="w-4 h-4" />
+                </span>
+                <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                  {group.category}
+                </h3>
+              </div>
+
+              <div className="flex items-center gap-2 flex-wrap">
+                {group.items.map((tech) => (
+                  <span
+                    key={tech}
+                    className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200/80 dark:border-zinc-800/80 shadow-2xs hover:scale-105 hover:border-zinc-400 dark:hover:border-zinc-600 transition-all cursor-default"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
           );
         })}
-      </div>
-
-      {/* Interactive Tech Badge Grid */}
-      <div className="p-5 rounded-2xl bg-zinc-50/50 dark:bg-zinc-900/40 border border-zinc-200/60 dark:border-zinc-800/60 flex gap-2.5 flex-wrap min-h-[100px] items-center">
-        <AnimatePresence mode="popLayout">
-          {(activeCategory === "All"
-            ? TECH_CATEGORIES
-            : TECH_CATEGORIES.filter((c) => c.name === activeCategory)
-          ).map((category) =>
-            category.items.map((tech, index) => (
-              <motion.span
-                key={`${category.name}-${tech}`}
-                initial={{ opacity: 0, scale: 0.85 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.85 }}
-                transition={{ duration: 0.18, delay: index * 0.02 }}
-                className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border border-zinc-200/80 dark:border-zinc-700/80 shadow-2xs hover:scale-105 hover:border-zinc-400 dark:hover:border-zinc-500 transition-all cursor-default flex items-center gap-1.5"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/80" />
-                {tech}
-              </motion.span>
-            ))
-          )}
-        </AnimatePresence>
       </div>
     </div>
   );
