@@ -42,7 +42,7 @@ function ProjectVideo({ src }: { src: string }) {
     >
       <MorphingDialogTrigger>
         <motion.div
-          whileHover={{ scale: 1.015 }}
+          whileHover={{ scale: 1.01 }}
           transition={{ duration: 0.2 }}
           className="relative aspect-video w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-900"
         >
@@ -68,9 +68,9 @@ function ProjectVideo({ src }: { src: string }) {
         </motion.div>
       </MorphingDialogTrigger>
 
-      {/* Fullscreen Expanded Video Modal */}
+      {/* Fullscreen Expanded Video Modal with Top, Bottom, Left, Right Padding */}
       <MorphingDialogContainer>
-        <MorphingDialogContent className="relative aspect-video rounded-2xl bg-zinc-50 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950 dark:ring-zinc-800/50">
+        <MorphingDialogContent className="relative aspect-video rounded-3xl bg-zinc-100/90 dark:bg-zinc-900/90 p-3 md:p-4 border border-zinc-200/80 dark:border-zinc-800/80 shadow-2xl backdrop-blur-md">
           <video
             ref={modalVideoRef}
             src={src}
@@ -80,11 +80,11 @@ function ProjectVideo({ src }: { src: string }) {
             playsInline
             onLoadedMetadata={applySlowPlayback}
             onLoadedData={applySlowPlayback}
-            className="aspect-video h-[50vh] w-full rounded-xl md:h-[70vh] object-cover"
+            className="aspect-video h-[50vh] w-full rounded-2xl md:h-[70vh] object-cover shadow-md"
           />
         </MorphingDialogContent>
         <MorphingDialogClose
-          className="fixed top-6 right-6 h-fit w-fit rounded-full bg-white dark:bg-zinc-800 p-1.5 shadow-lg hover:scale-110 active:scale-95 transition-transform"
+          className="fixed top-6 right-6 h-fit w-fit rounded-full bg-white dark:bg-zinc-800 p-2 shadow-lg hover:scale-110 active:scale-95 transition-transform border border-zinc-200 dark:border-zinc-700"
           variants={{
             initial: { opacity: 0, scale: 0.8 },
             animate: {
@@ -113,7 +113,7 @@ function ProjectImage({ src }: { src: string }) {
     >
       <MorphingDialogTrigger>
         <motion.div
-          whileHover={{ scale: 1.015 }}
+          whileHover={{ scale: 1.01 }}
           transition={{ duration: 0.2 }}
           className="relative aspect-video w-full overflow-hidden rounded-xl bg-black"
         >
@@ -126,18 +126,18 @@ function ProjectImage({ src }: { src: string }) {
         </motion.div>
       </MorphingDialogTrigger>
 
-      {/* Fullscreen Expanded Image Modal */}
+      {/* Fullscreen Expanded Image Modal with Top, Bottom, Left, Right Padding */}
       <MorphingDialogContainer>
-        <MorphingDialogContent className="relative aspect-video rounded-2xl bg-zinc-50 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950 dark:ring-zinc-800/50">
+        <MorphingDialogContent className="relative aspect-video rounded-3xl bg-zinc-100/90 dark:bg-zinc-900/90 p-3 md:p-4 border border-zinc-200/80 dark:border-zinc-800/80 shadow-2xl backdrop-blur-md">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={src}
             alt="Project Showcase"
-            className="aspect-video h-[50vh] w-full rounded-xl md:h-[70vh] object-contain bg-black"
+            className="aspect-video h-[50vh] w-full rounded-2xl md:h-[70vh] object-contain bg-black shadow-md"
           />
         </MorphingDialogContent>
         <MorphingDialogClose
-          className="fixed top-6 right-6 h-fit w-fit rounded-full bg-white dark:bg-zinc-800 p-1.5 shadow-lg hover:scale-110 active:scale-95 transition-transform"
+          className="fixed top-6 right-6 h-fit w-fit rounded-full bg-white dark:bg-zinc-800 p-2 shadow-lg hover:scale-110 active:scale-95 transition-transform border border-zinc-200 dark:border-zinc-700"
           variants={{
             initial: { opacity: 0, scale: 0.8 },
             animate: {
@@ -224,10 +224,10 @@ export function ProjectsSection() {
                 transition={{ duration: 0.2 }}
                 className="space-y-2 group/card"
               >
-                {/* Media Outer Box */}
+                {/* Media Outer Box with Padded Top, Bottom, Left, Right Frame */}
                 <div
                   className={cn(
-                    'relative rounded-2xl bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50 transition-shadow duration-300 group-hover/card:shadow-md',
+                    'relative rounded-2xl bg-zinc-50/40 p-1.5 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50 transition-all duration-300 group-hover/card:ring-zinc-300 dark:group-hover/card:ring-zinc-700',
                     project.tag?.includes('Grant') && 'ring-emerald-500/40 dark:ring-emerald-500/40',
                     project.tag === 'Building' && 'ring-blue-500/40 dark:ring-blue-500/40'
                   )}
@@ -240,7 +240,7 @@ export function ProjectsSection() {
                 </div>
 
                 {/* Info & Links */}
-                <div className="px-1">
+                <div className="px-1 pt-1">
                   <div className="flex items-center gap-3 mb-1 flex-wrap">
                     <a
                       className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50"
@@ -316,10 +316,11 @@ export function ProjectsSection() {
                 transition={{ duration: 0.2 }}
                 className="space-y-2 group/card"
               >
-                <div className="relative rounded-2xl bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50 transition-shadow duration-300 group-hover/card:shadow-md">
+                {/* Media Outer Box with Padded Top, Bottom, Left, Right Frame */}
+                <div className="relative rounded-2xl bg-zinc-50/40 p-1.5 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50 transition-all duration-300 group-hover/card:ring-zinc-300 dark:group-hover/card:ring-zinc-700">
                   <ProjectVideo src={design.video} />
                 </div>
-                <div className="px-1">
+                <div className="px-1 pt-1">
                   <div className="flex items-center gap-3 mb-1">
                     <a
                       className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50"
