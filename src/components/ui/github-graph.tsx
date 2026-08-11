@@ -1,36 +1,314 @@
 "use client";
 
-import { GitHubCalendar } from "react-github-calendar";
+import { useEffect, useState } from "react";
+import { motion } from "motion/react";
+import { cn } from "@/lib/utils";
 
-export function GithubGraph() {
-  const explicitTheme = {
-    light: ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"],
-    dark: ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"],
+interface ContributionDay {
+  date: string;
+  count: number;
+  level: number;
+}
+
+interface GitHubContributionsResponse {
+  total?: {
+    [key: string]: number;
+    lastYear: number;
+  };
+  contributions: ContributionDay[];
+}
+
+export function GitHubContributionsGraph({
+  username = "iamkaifyyy",
+}: {
+  username?: string;
+}) {
+  const [data, setData] = useState<GitHubContributionsResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchContributions = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(
+          `https://github-contributions-api.jogruber.de/v4/${username}?y=last`
+        );
+        if (!response.ok) throw new Error("Failed to fetch contributions");
+        const json = await response.json();
+        setData(json);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchContributions();
+  }, [username]);
+
+  if (loading) {
+    return (
+      <div className="relative w-full rounded-2xl bg-zinc-50/40 p-6 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50 my-10">
+        <h3 className="mb-4 text-lg font-medium">GitHub Contributions</h3>
+        <div className="flex items-center gap-2 mb-4">
+          <a
+            href={`https://github.com/${username}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50"
+          >
+            @{username}
+            <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
+          </a>
+        </div>
+        <div className="grid grid-cols-53 gap-1">
+          {Array.from({ length: 371 }).map((_, i) => (
+            <div
+              key={i}
+              className="aspect-square w-full rounded bg-zinc-200 dark:bg-zinc-800 animate-pulse"
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !data) {
+    return null;
+  }
+
+  const contributions = data.contributions;
+
+  // Filter contributions from March 1, 2025 to current date
+  const march2025 = new Date("2025-02-02");
+  const today = new Date();
+  today.setHours(23, 59, 59, 999); // End of today
+
+  const filteredContributions = contributions.filter((contrib) => {
+    const contribDate = new Date(contrib.date);
+    return contribDate >= march2025 && contribDate <= today;
+  });
+
+  // Create a map of date to contribution for quick lookup
+  const contribMap = new Map<
+    string,
+    { date: string; count: number; level: number }
+  >();
+  filteredContributions.forEach((contrib) => {
+    contribMap.set(contrib.date, contrib);
+  });
+
+  // Set date range to March 1, 2025 to today
+  const firstDate = new Date(march2025);
+  const lastDate = new Date(today);
+
+  // Calculate the first Sunday (GitHub starts weeks on Sunday)
+  // Start from March 1, 2025
+  const firstSunday = new Date(march2025);
+  const firstDayOfWeek = firstSunday.getDay();
+  firstSunday.setDate(firstSunday.getDate() - firstDayOfWeek);
+
+  // Calculate total days and weeks from March 2025 to today
+  const totalDays = Math.ceil(
+    (lastDate.getTime() - firstSunday.getTime()) / (1000 * 60 * 60 * 24)
+  );
+  const totalWeeks = Math.ceil(totalDays / 7);
+
+  // Build weeks array (each week is a column with 7 days)
+  const weeks: Array<
+    Array<{ date: string; count: number; level: number } | null>
+  > = [];
+
+  for (let weekIndex = 0; weekIndex < totalWeeks; weekIndex++) {
+    const week: Array<{
+      date: string;
+      count: number;
+      level: number;
+    } | null> = [];
+
+    for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
+      const currentDate = new Date(firstSunday);
+      currentDate.setDate(currentDate.getDate() + weekIndex * 7 + dayIndex);
+
+      // Check if this date is within our range
+      const dateStr = currentDate.toISOString().split("T")[0];
+
+      if (contribMap.has(dateStr)) {
+        week.push(contribMap.get(dateStr)!);
+      } else if (currentDate >= firstDate && currentDate <= lastDate) {
+        // Date is in range but no contributions
+        week.push({ date: dateStr, count: 0, level: 0 });
+      } else {
+        // Date is outside range (padding)
+        week.push(null);
+      }
+    }
+
+    weeks.push(week);
+  }
+
+  const getLevelColor = (level: number, count: number) => {
+    if (count === 0) {
+      return "bg-zinc-100 dark:bg-zinc-900";
+    }
+    const colors = [
+      "bg-emerald-100 dark:bg-emerald-900/30",
+      "bg-emerald-300 dark:bg-emerald-700/50",
+      "bg-emerald-500 dark:bg-emerald-600/70",
+      "bg-emerald-600 dark:bg-emerald-500/80",
+      "bg-emerald-700 dark:bg-emerald-400/90",
+    ];
+    return colors[Math.min(level, 4)] || colors[0];
   };
 
   return (
-    <section className="w-full mt-12 mb-28 flex flex-col items-center justify-center">
-      <div className="w-full p-6 md:p-8 rounded-2xl bg-zinc-50/80 dark:bg-zinc-900/60 border border-zinc-200/80 dark:border-zinc-800 backdrop-blur-sm shadow-xs flex flex-col items-center justify-center">
-        <div className="flex items-center gap-2 mb-5">
-          <svg className="w-4 h-4 fill-current text-zinc-900 dark:text-zinc-100" viewBox="0 0 24 24">
-            <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+    <div className="relative w-full rounded-2xl bg-zinc-50/40 p-6 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50 my-10">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-medium">GitHub Contributions</h3>
+        <a
+          href={`https://github.com/${username}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50 text-sm"
+        >
+          @{username}
+          <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 15 15"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-3 w-3 inline-block ml-1"
+          >
+            <path
+              d="M3.64645 11.3536C3.45118 11.1583 3.45118 10.8417 3.64645 10.6465L10.2929 4L6 4C5.72386 4 5.5 3.77614 5.5 3.5C5.5 3.22386 5.72386 3 6 3L11.5 3C11.6326 3 11.7598 3.05268 11.8536 3.14645C11.9473 3.24022 12 3.36739 12 3.5L12 9.00001C12 9.27615 11.7761 9.50001 11.5 9.50001C11.2239 9.50001 11 9.27615 11 9.00001V4.70711L4.35355 11.3536C4.15829 11.5488 3.84171 11.5488 3.64645 11.3536Z"
+              fill="currentColor"
+              fillRule="evenodd"
+              clipRule="evenodd"
+            ></path>
           </svg>
-          <h3 className="font-semibold text-xs md:text-sm text-zinc-900 dark:text-zinc-100 tracking-tight">
-            Contributions Activity
-          </h3>
-        </div>
+        </a>
+      </div>
 
-        <div className="w-full overflow-x-auto flex justify-center py-1">
-          <GitHubCalendar
-            username="iamkaifyyy"
-            fontSize={12}
-            blockSize={12}
-            blockMargin={4}
-            theme={explicitTheme}
-            colorScheme="light"
-          />
+      <div className="overflow-x-auto hide-scrollbar -mx-6 px-6 pb-3">
+        <div className="flex gap-0.5 items-end min-w-fit">
+          {/* Day labels */}
+          <div className="flex flex-col gap-0.5 pr-3 pb-2.5 pt-0.5 justify-end left-0 z-10">
+            <div className="h-3.5"></div>
+            {["Sun", "", "Tue", "", "Thu", "", "Sat"].map((day, index) => (
+              <div
+                key={index}
+                className={cn(
+                  "text-[10px] text-zinc-500 dark:text-zinc-400 h-3 flex items-center font-medium px-1.5 py-0.5 rounded-sm",
+                  day
+                    ? "visible bg-zinc-50/80 dark:bg-zinc-950/80 backdrop-blur-sm"
+                    : "invisible",
+                  "transition-colors duration-200"
+                )}
+                style={{ width: "28px", height: "12px" }}
+              >
+                {day}
+              </div>
+            ))}
+          </div>
+
+          {/* Graph */}
+          <div className="flex gap-0.5">
+            {weeks.map((week, weekIndex) => {
+              const weekDate = week.find((d) => d !== null);
+              const weekMonth = weekDate
+                ? new Date(weekDate.date).getMonth()
+                : -1;
+              const isNewMonth =
+                weekIndex === 0 ||
+                (() => {
+                  const prevWeek = weeks[weekIndex - 1];
+                  const prevWeekDate = prevWeek.find((d) => d !== null);
+                  const prevMonth = prevWeekDate
+                    ? new Date(prevWeekDate.date).getMonth()
+                    : -1;
+                  return weekMonth !== prevMonth;
+                })();
+
+              return (
+                <div key={weekIndex} className="flex flex-col gap-0.5">
+                  {/* Month label */}
+                  {isNewMonth && weekDate && (
+                    <div className="text-[10px] text-zinc-500 dark:text-zinc-400 h-3.5 mb-0.5 whitespace-nowrap font-medium">
+                      {new Date(weekDate.date).toLocaleDateString("en-US", {
+                        month: "short",
+                      })}
+                    </div>
+                  )}
+                  {!isNewMonth && <div className="h-3.5 mb-0.5"></div>}
+
+                  {/* Contribution squares */}
+                  <div className="flex flex-col gap-0.5">
+                    {week.map((contrib, dayIndex) => {
+                      if (contrib === null) {
+                        return (
+                          <div key={dayIndex} className="w-[11px] h-[11px]" />
+                        );
+                      }
+
+                      return (
+                        <motion.div
+                          key={`${weekIndex}-${dayIndex}`}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{
+                            duration: 0.2,
+                            delay: (weekIndex * 7 + dayIndex) * 0.002,
+                          }}
+                          className={cn(
+                            "aspect-square w-[11px] h-[11px] rounded-[2px] transition-all duration-200",
+                            getLevelColor(contrib.level, contrib.count),
+                            contrib.count > 0 &&
+                              "hover:ring-2 hover:ring-emerald-400/50 dark:hover:ring-emerald-500/50 hover:scale-110 cursor-pointer"
+                          )}
+                          title={`${contrib.date || "No contributions"}: ${
+                            contrib.count
+                          } contribution${contrib.count !== 1 ? "s" : ""}`}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
-    </section>
+
+      {/* Legend */}
+      <div className="flex items-center justify-between mt-5 pt-4 border-t border-zinc-200/50 dark:border-zinc-800/50">
+        {data.total && (
+          <div className="text-sm text-zinc-600 dark:text-zinc-400">
+            <span className="font-medium text-zinc-900 dark:text-zinc-50">
+              {data.total.lastYear.toLocaleString()}
+            </span>{" "}
+            contributions in the last year
+          </div>
+        )}
+        <div className="flex items-center gap-2.5 text-[10px] text-zinc-600 dark:text-zinc-400">
+          <span className="font-medium">Less</span>
+          <div className="flex gap-0.5">
+            {[0, 1, 2, 3, 4].map((level) => (
+              <div
+                key={level}
+                className={cn(
+                  "aspect-square w-[11px] h-[11px] rounded-[2px]",
+                  getLevelColor(level, level > 0 ? 1 : 0)
+                )}
+              />
+            ))}
+          </div>
+          <span className="font-medium">More</span>
+        </div>
+      </div>
+    </div>
   );
 }
+
+export const GithubGraph = GitHubContributionsGraph;

@@ -5,11 +5,29 @@ import Image from "next/image";
 import { createTimeline, stagger, splitText } from "animejs";
 import { DockDemo } from "@/components/ui/dock-demo";
 import { TextEffect } from "@/components/ui/text-effect";
+import { ProjectsSection } from "@/components/ui/projects-section";
+import { GithubGraph } from "@/components/ui/github-graph";
 
 export default function Home() {
   const [isFading, setIsFading] = useState(false);
-  const japaneseRef = useRef<HTMLSpanElement>(null);
+  const [isInitialFlipped, setIsInitialFlipped] = useState(false);
   const hobbiesRef = useRef<HTMLParagraphElement>(null);
+
+  useEffect(() => {
+    const showGifTimer = setTimeout(() => {
+      setIsInitialFlipped(true);
+    }, 400);
+
+    
+    const hideGifTimer = setTimeout(() => {
+      setIsInitialFlipped(false);
+    }, 2200);
+
+    return () => {
+      clearTimeout(showGifTimer);
+      clearTimeout(hideGifTimer);
+    };
+  }, []);
 
   useEffect(() => {
     const fadeTimer = setTimeout(() => {
@@ -21,20 +39,6 @@ export default function Home() {
         loop: false,
         defaults: { ease: "inOut(3)", duration: 650 },
       });
-
-      if (japaneseRef.current) {
-        const { chars: jpChars } = splitText(japaneseRef.current, {
-          chars: true,
-        });
-
-        if (jpChars && jpChars.length > 0) {
-          tl.add(jpChars, {
-            translateY: ["-100%", "0%"],
-            opacity: [0, 1],
-            delay: stagger(60),
-          });
-        }
-      }
 
       if (hobbiesRef.current) {
         const { words: hobbyWords } = splitText(hobbiesRef.current, {
@@ -74,14 +78,17 @@ export default function Home() {
             >
               Kaify
             </TextEffect>
-            <span
-              ref={japaneseRef}
-              className={`text-sm md:text-base font-bold text-zinc-400 dark:text-zinc-500 tracking-widest transition-all duration-700 inline-block overflow-hidden ${
-                isFading ? "opacity-0 -translate-x-2 pointer-events-none" : "opacity-100 translate-x-0"
-              }`}
-            >
-              カイフィー
-            </span>
+            <div className={`transition-all duration-700 ${isFading ? "opacity-0 -translate-x-2 pointer-events-none" : ""}`}>
+              <TextEffect
+                as="span"
+                per="char"
+                preset="fade-in-blur"
+                delay={0.1}
+                className="text-sm md:text-base font-bold text-zinc-400 dark:text-zinc-500 tracking-widest inline-block"
+              >
+                カイフィー
+              </TextEffect>
+            </div>
           </div>
           <TextEffect
             as="h2"
@@ -187,7 +194,11 @@ export default function Home() {
 
         {}
         <div className="relative group shrink-0 [perspective:1000px]">
-          <div className="w-28 h-28 md:w-36 md:h-36 rounded-2xl p-1 bg-gradient-to-tr from-zinc-200 via-zinc-100 to-zinc-300 dark:from-zinc-800 dark:to-zinc-900 shadow-md ring-1 ring-zinc-200 dark:ring-zinc-800 transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] cursor-pointer">
+          <div
+            className={`w-28 h-28 md:w-36 md:h-36 rounded-2xl p-1 bg-gradient-to-tr from-zinc-200 via-zinc-100 to-zinc-300 dark:from-zinc-800 dark:to-zinc-900 shadow-md ring-1 ring-zinc-200 dark:ring-zinc-800 transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] cursor-pointer ${
+              isInitialFlipped ? "[transform:rotateY(180deg)]" : ""
+            }`}
+          >
             {/* Front Face: me.jpeg */}
             <div className="absolute inset-1 rounded-xl overflow-hidden bg-white [backface-visibility:hidden]">
               <Image
@@ -213,6 +224,8 @@ export default function Home() {
         </div>
       </div>
 
+      <ProjectsSection />
+      <GithubGraph />
 
       <div className="fixed bottom-6 z-50">
         <DockDemo />
