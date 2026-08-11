@@ -228,7 +228,7 @@ export default function Home() {
       <GithubGraph />
       <TechStackSection />
 
-      <div className="fixed bottom-6 z-50">
+      <div className="fixed top-3 md:top-4 left-1/2 -translate-x-1/2 z-50">
         <DockDemo />
       </div>
     </main>
