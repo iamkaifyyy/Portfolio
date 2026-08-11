@@ -16,11 +16,15 @@ import {
 function ProjectVideo({ src }: { src: string }) {
   const [isLoading, setIsLoading] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const modalVideoRef = useRef<HTMLVideoElement>(null);
+
+  const applySlowPlayback = () => {
+    if (videoRef.current) videoRef.current.playbackRate = 0.25;
+    if (modalVideoRef.current) modalVideoRef.current.playbackRate = 0.25;
+  };
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.playbackRate = 0.5;
-    }
+    applySlowPlayback();
   }, [src]);
 
   return (
@@ -52,12 +56,11 @@ function ProjectVideo({ src }: { src: string }) {
             loop
             muted
             playsInline
-            onLoadedData={() => setIsLoading(false)}
-            onLoadedMetadata={() => {
-              if (videoRef.current) {
-                videoRef.current.playbackRate = 0.5;
-              }
+            onLoadedData={() => {
+              setIsLoading(false);
+              applySlowPlayback();
             }}
+            onLoadedMetadata={applySlowPlayback}
             className="aspect-video w-full cursor-zoom-in rounded-xl object-cover"
           />
         </div>
@@ -66,11 +69,14 @@ function ProjectVideo({ src }: { src: string }) {
       <MorphingDialogContainer>
         <MorphingDialogContent className="relative aspect-video rounded-2xl bg-zinc-50 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950 dark:ring-zinc-800/50">
           <video
+            ref={modalVideoRef}
             src={src}
             autoPlay
             loop
             muted
             playsInline
+            onLoadedMetadata={applySlowPlayback}
+            onLoadedData={applySlowPlayback}
             className="aspect-video h-[50vh] w-full rounded-xl md:h-[70vh] object-cover"
           />
         </MorphingDialogContent>
@@ -190,15 +196,7 @@ export function ProjectsSection() {
               className="space-y-2"
             >
               {/* Media Card Outer Wrapper */}
-              <div
-                className={`relative rounded-2xl bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50 ${
-                  project.tag && project.tag.includes("Grant")
-                    ? "video-container-green"
-                    : project.tag && project.tag.includes("Building")
-                    ? "video-container-blue"
-                    : ""
-                }`}
-              >
+              <div className="relative rounded-2xl bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50">
                 {project.type === "image" && project.imageUrl ? (
                   <ProjectImage src={project.imageUrl} alt={project.name} />
                 ) : project.videoUrl ? (
@@ -208,8 +206,8 @@ export function ProjectsSection() {
 
               {/* Card Details Text */}
               <div className="px-1">
-                {/* Title & Tag */}
-                <div className="flex items-center gap-3 mb-1 flex-wrap">
+                {/* Title */}
+                <div className="flex items-center gap-3 mb-1">
                   <a
                     className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50 cursor-pointer"
                     href={project.liveUrl || "#"}
@@ -219,20 +217,6 @@ export function ProjectsSection() {
                     {project.name}
                     <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
                   </a>
-
-                  {project.tag && (
-                    <span
-                      className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset cursor-pointer ${
-                        project.tag.includes("Grant")
-                          ? "bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 ring-green-600/20 dark:ring-green-500/30"
-                          : project.tag === "Building"
-                          ? "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 ring-blue-600/20 dark:ring-blue-500/30"
-                          : "bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 ring-purple-600/20 dark:ring-purple-500/30"
-                      }`}
-                    >
-                      {project.tag}
-                    </span>
-                  )}
                 </div>
 
                 {/* Github & View Links */}
