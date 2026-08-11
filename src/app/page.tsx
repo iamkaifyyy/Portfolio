@@ -68,7 +68,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-start pt-24 md:pt-36 pb-32 px-6 md:px-12 relative max-w-4xl mx-auto space-y-20 md:space-y-24">
+    <main className="min-h-screen flex flex-col items-center justify-start pt-20 md:pt-28 pb-24 px-6 md:px-12 relative max-w-4xl mx-auto space-y-12 md:space-y-16">
       <div className="flex items-start justify-center gap-6 md:gap-10">
         <div className="flex flex-col items-start max-w-md">
           <div className="flex items-baseline gap-3">
