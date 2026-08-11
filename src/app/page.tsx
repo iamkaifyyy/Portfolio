@@ -6,7 +6,6 @@ import Image from "next/image";
 import { createTimeline, stagger, splitText } from "animejs";
 import { DockDemo } from "@/components/ui/dock-demo";
 import { TextEffect } from "@/components/ui/text-effect";
-import { ProjectsSection } from "@/components/ui/projects-section";
 import { GithubGraph } from "@/components/ui/github-graph";
 import { TechStackSection } from "@/components/ui/tech-stack-section";
 
@@ -224,7 +223,6 @@ export default function Home() {
         </div>
       </div>
 
-      <ProjectsSection />
       <GithubGraph />
       <TechStackSection />
 

@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ExternalLink, X } from "lucide-react";
-import { PROJECTS_DATA, DESIGNS_DATA } from "./projects-data";
+import { PROJECTS, DESIGNS } from "./projects-data";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   MorphingDialog,
@@ -88,11 +88,47 @@ function ProjectVideo({ src }: { src: string }) {
   );
 }
 
+function ProjectImage({ src, alt }: { src: string; alt: string }) {
+  return (
+    <MorphingDialog
+      transition={{
+        type: "spring",
+        bounce: 0,
+        duration: 0.3,
+      }}
+    >
+      <MorphingDialogTrigger>
+        <div className="relative aspect-video w-full">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={src}
+            alt={alt}
+            className="aspect-video w-full cursor-zoom-in rounded-xl object-contain bg-black"
+          />
+        </div>
+      </MorphingDialogTrigger>
+      <MorphingDialogContainer>
+        <MorphingDialogContent className="relative aspect-video rounded-2xl bg-zinc-50 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950 dark:ring-zinc-800/50">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={src}
+            alt={alt}
+            className="aspect-video h-[50vh] w-full rounded-xl md:h-[70vh] object-contain bg-black"
+          />
+        </MorphingDialogContent>
+        <MorphingDialogClose className="fixed top-6 right-6 h-fit w-fit rounded-full bg-white dark:bg-zinc-800 p-1 shadow-md">
+          <X className="h-5 w-5 text-zinc-500 dark:text-zinc-400" />
+        </MorphingDialogClose>
+      </MorphingDialogContainer>
+    </MorphingDialog>
+  );
+}
+
 export function ProjectsSection() {
   const [activeTab, setActiveTab] = useState<"projects" | "design">("projects");
 
-  const web2Projects = PROJECTS_DATA.filter((p) => p.category === "web2");
-  const web3Projects = PROJECTS_DATA.filter((p) => p.category === "web3");
+  const web2Projects = PROJECTS.filter((p) => p.category === "web2");
+  const web3Projects = PROJECTS.filter((p) => p.category === "web3");
 
   return (
     <motion.section
@@ -171,7 +207,11 @@ export function ProjectsSection() {
                   >
                     {/* Media Card Outer Wrapper */}
                     <div className="relative rounded-2xl bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50">
-                      {project.videoUrl && <ProjectVideo src={project.videoUrl} />}
+                      {project.type === "image" && project.image ? (
+                        <ProjectImage src={project.image} alt={project.name} />
+                      ) : project.video ? (
+                        <ProjectVideo src={project.video} />
+                      ) : null}
                     </div>
 
                     {/* Card Details Text */}
@@ -180,7 +220,7 @@ export function ProjectsSection() {
                       <div className="flex items-center gap-3 mb-1">
                         <a
                           className="font-sans group relative inline-block font-[450] text-sm md:text-base text-zinc-900 dark:text-zinc-50 cursor-pointer"
-                          href={project.liveUrl || "#"}
+                          href={project.link || "#"}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -191,10 +231,10 @@ export function ProjectsSection() {
 
                       {/* Github & View Links */}
                       <p className="mb-1 text-xs md:text-sm">
-                        {project.githubUrl && (
+                        {project.github && (
                           <a
                             className="font-sans group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50 mr-4 cursor-pointer"
-                            href={project.githubUrl}
+                            href={project.github}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -202,10 +242,10 @@ export function ProjectsSection() {
                             <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
                           </a>
                         )}
-                        {project.liveUrl && (
+                        {project.link && (
                           <a
                             className="font-sans group relative inline-flex items-center font-[450] text-zinc-900 dark:text-zinc-50 cursor-pointer"
-                            href={project.liveUrl}
+                            href={project.link}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -244,7 +284,11 @@ export function ProjectsSection() {
                   >
                     {/* Media Card Outer Wrapper */}
                     <div className="relative rounded-2xl bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50">
-                      {project.videoUrl && <ProjectVideo src={project.videoUrl} />}
+                      {project.type === "image" && project.image ? (
+                        <ProjectImage src={project.image} alt={project.name} />
+                      ) : project.video ? (
+                        <ProjectVideo src={project.video} />
+                      ) : null}
                     </div>
 
                     {/* Card Details Text */}
@@ -253,7 +297,7 @@ export function ProjectsSection() {
                       <div className="flex items-center gap-3 mb-1">
                         <a
                           className="font-sans group relative inline-block font-[450] text-sm md:text-base text-zinc-900 dark:text-zinc-50 cursor-pointer"
-                          href={project.liveUrl || "#"}
+                          href={project.link || "#"}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -264,10 +308,10 @@ export function ProjectsSection() {
 
                       {/* Github & View Links */}
                       <p className="mb-1 text-xs md:text-sm">
-                        {project.githubUrl && (
+                        {project.github && (
                           <a
                             className="font-sans group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50 mr-4 cursor-pointer"
-                            href={project.githubUrl}
+                            href={project.github}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -275,10 +319,10 @@ export function ProjectsSection() {
                             <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
                           </a>
                         )}
-                        {project.liveUrl && (
+                        {project.link && (
                           <a
                             className="font-sans group relative inline-flex items-center font-[450] text-zinc-900 dark:text-zinc-50 cursor-pointer"
-                            href={project.liveUrl}
+                            href={project.link}
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -307,7 +351,7 @@ export function ProjectsSection() {
             transition={{ duration: 0.3 }}
             className="grid grid-cols-1 gap-6 sm:grid-cols-2"
           >
-            {DESIGNS_DATA.map((design) => (
+            {DESIGNS.map((design) => (
               <motion.div
                 key={design.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -316,13 +360,13 @@ export function ProjectsSection() {
                 className="space-y-2"
               >
                 <div className="relative rounded-2xl bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50">
-                  {design.videoUrl && <ProjectVideo src={design.videoUrl} />}
+                  {design.video && <ProjectVideo src={design.video} />}
                 </div>
                 <div className="px-1">
                   <div className="flex items-center gap-3 mb-1">
                     <a
                       className="font-sans group relative inline-block font-[450] text-sm md:text-base text-zinc-900 dark:text-zinc-50 cursor-pointer"
-                      href={design.liveUrl || "#"}
+                      href={design.link || "#"}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -331,21 +375,10 @@ export function ProjectsSection() {
                     </a>
                   </div>
                   <p className="mb-1 text-xs md:text-sm">
-                    {design.githubUrl && (
-                      <a
-                        className="font-sans group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50 mr-4 cursor-pointer"
-                        href={design.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Github
-                        <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
-                      </a>
-                    )}
-                    {design.liveUrl && (
+                    {design.link && (
                       <a
                         className="font-sans group relative inline-flex items-center font-[450] text-zinc-900 dark:text-zinc-50 cursor-pointer"
-                        href={design.liveUrl}
+                        href={design.link}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
