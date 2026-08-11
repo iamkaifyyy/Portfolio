@@ -27,7 +27,7 @@ function VideoPreview({ src }: { src: string }) {
           videoRef.current.playbackRate = 0.5;
         }
       }}
-      className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
+      className="aspect-video w-full rounded-xl object-cover"
     />
   );
 }
@@ -41,24 +41,24 @@ export function ProjectsSection() {
       : PROJECTS_DATA.filter((p) => p.category === activeTab);
 
   return (
-    <section className="w-full max-w-xl mx-auto my-10 px-4 md:px-0">
+    <section className="w-full max-w-2xl mx-auto my-12 px-4 md:px-0">
       {/* Top Tab Switcher (All / Web2 / Web3) */}
-      <div className="flex items-center justify-center gap-8 border-b border-zinc-200/80 dark:border-zinc-800/80 mb-8 pb-2">
+      <div className="flex items-center gap-6 border-b border-zinc-200/80 dark:border-zinc-800/80 mb-10 pb-2">
         {(["all", "web2", "web3"] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`relative text-sm font-semibold capitalize transition-colors cursor-pointer pb-2 ${
+            className={`relative text-lg font-medium capitalize transition-colors cursor-pointer pb-2 ${
               activeTab === tab
-                ? "text-zinc-900 dark:text-zinc-100"
-                : "text-zinc-400 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+                ? "text-zinc-900 dark:text-zinc-50"
+                : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50"
             }`}
           >
             {tab === "all" ? "All Projects" : tab.toUpperCase()}
             {activeTab === tab && (
               <motion.div
                 layoutId="projectsTabUnderline"
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-zinc-900 dark:bg-zinc-100 rounded-full"
+                className="absolute -bottom-2 left-0 right-0 h-0.5 bg-zinc-900 dark:bg-zinc-50"
                 transition={{ type: "spring", stiffness: 400, damping: 35 }}
               />
             )}
@@ -66,47 +66,51 @@ export function ProjectsSection() {
         ))}
       </div>
 
-      {/* Constrained Grid Layout */}
+      {/* Spacious Grid Layout matching exact Portfolio design */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeTab}
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8"
+          exit={{ opacity: 0, y: -15 }}
+          transition={{ duration: 0.25 }}
+          className="grid grid-cols-1 gap-8 sm:grid-cols-2"
         >
           {filteredProjects.map((item) => (
-            <div key={item.id} className="flex flex-col group text-left">
-              {/* Media Preview Box */}
-              {item.videoUrl ? (
-                <div className="relative aspect-video w-full rounded-xl overflow-hidden mb-2.5 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800/60 shadow-xs group-hover:shadow-md transition-shadow">
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-3"
+            >
+              {/* Media Container with Padded Frame */}
+              <div className="relative rounded-2xl bg-zinc-50/60 p-1 ring-1 ring-zinc-200/60 ring-inset dark:bg-zinc-950/60 dark:ring-zinc-800/60 shadow-xs">
+                {item.videoUrl ? (
                   <VideoPreview src={item.videoUrl} />
-                </div>
-              ) : item.imageUrl ? (
-                <div className="relative aspect-video w-full rounded-xl overflow-hidden mb-2.5 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800/60 shadow-xs group-hover:shadow-md transition-shadow">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                ) : item.imageUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={item.imageUrl}
                     alt={item.name}
-                    className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
+                    className="aspect-video w-full rounded-xl object-cover"
                   />
-                </div>
-              ) : null}
+                ) : null}
+              </div>
 
-              {/* Text & Links Content Container */}
-              <div className="flex flex-col gap-1">
-                {/* Title & Tag Row */}
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="font-semibold text-base text-zinc-900 dark:text-zinc-100">
+              {/* Text Info Container */}
+              <div className="px-1 space-y-1.5">
+                {/* Title & Badge Row */}
+                <div className="flex items-center gap-3">
+                  <h3 className="font-semibold text-base md:text-lg text-zinc-900 dark:text-zinc-100 tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {item.name}
                   </h3>
                   {item.tag && (
                     <span
-                      className={`px-2 py-0.5 rounded-full text-[10px] font-medium border ${
+                      className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset ${
                         item.category === "web3"
-                          ? "bg-purple-100/90 dark:bg-purple-950/70 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800"
-                          : "bg-emerald-100/90 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800"
+                          ? "bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 ring-blue-600/20 dark:ring-blue-500/30"
+                          : "bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 ring-green-600/20 dark:ring-green-500/30"
                       }`}
                     >
                       {item.tag}
@@ -114,38 +118,38 @@ export function ProjectsSection() {
                   )}
                 </div>
 
-                {/* Action Links Row with Animated Underline */}
-                <div className="flex items-center gap-3 text-xs font-normal text-zinc-500 dark:text-zinc-400">
+                {/* Animated Links Row */}
+                <div className="flex items-center gap-4">
                   {item.githubUrl && (
                     <a
+                      className="font-sans group relative inline-block font-[450] text-sm text-zinc-900 dark:text-zinc-50"
                       href={item.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="relative group/link py-0.5 transition-colors hover:text-zinc-900 dark:hover:text-zinc-100"
                     >
                       Github
-                      <span className="absolute left-0 bottom-0 w-0 h-[1.5px] bg-zinc-900 dark:bg-zinc-100 group-hover/link:w-full transition-all duration-300" />
+                      <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
                     </a>
                   )}
                   {item.liveUrl && (
                     <a
+                      className="font-sans group relative inline-flex items-center gap-1 font-[450] text-sm text-zinc-900 dark:text-zinc-50"
                       href={item.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="relative group/link inline-flex items-center gap-1 py-0.5 transition-colors hover:text-zinc-900 dark:hover:text-zinc-100"
                     >
-                      View <ExternalLink className="w-3 h-3" />
-                      <span className="absolute left-0 bottom-0 w-0 h-[1.5px] bg-zinc-900 dark:bg-zinc-100 group-hover/link:w-full transition-all duration-300" />
+                      View <ExternalLink className="w-3.5 h-3.5" />
+                      <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
                     </a>
                   )}
                 </div>
 
-                {/* Description - matching font style, slightly lighter color */}
-                <p className="text-xs md:text-sm font-normal text-zinc-500 dark:text-zinc-400 leading-relaxed pt-0.5">
+                {/* Description */}
+                <p className="text-base font-normal font-sans text-zinc-600 dark:text-zinc-400 leading-relaxed pt-0.5">
                   {item.description}
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
         </motion.div>
       </AnimatePresence>
