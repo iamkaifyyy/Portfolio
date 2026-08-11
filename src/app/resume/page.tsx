@@ -40,19 +40,13 @@ export default function ResumePage() {
           </div>
         </div>
 
-        {/* Vertical Rectangle PDF View Container without plugin controls */}
+        {/* PDF View Container */}
         <div className="w-full max-w-2xl mx-auto h-[82vh] md:h-[88vh] max-h-[880px] rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-sm bg-zinc-100 dark:bg-zinc-900">
-          <object
-            data="/kaify.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit"
-            type="application/pdf"
+          <iframe
+            src="/kaify.pdf"
             className="w-full h-full border-none"
-          >
-            <embed
-              src="/kaify.pdf#toolbar=0&navpanes=0&scrollbar=0&view=Fit"
-              type="application/pdf"
-              className="w-full h-full border-none"
-            />
-          </object>
+            title="Kaify Resume PDF"
+          />
         </div>
       </main>
     </div>
