@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { createTimeline, stagger, splitText } from "animejs";
-import { DockDemo } from "@/components/ui/dock-demo";
 import { TextEffect } from "@/components/ui/text-effect";
 import { ProjectsSection } from "@/components/ui/projects-section";
 import { GithubGraph } from "@/components/ui/github-graph";
@@ -15,22 +14,8 @@ import { Sparkles } from "lucide-react";
 export default function Home() {
   const [isFading, setIsFading] = useState(false);
   const [isInitialFlipped, setIsInitialFlipped] = useState(false);
-  const [isAtBottom, setIsAtBottom] = useState(false);
   const hobbiesRef = useRef<HTMLParagraphElement>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const bottomThreshold = 220;
-      const isBottom =
-        window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight - bottomThreshold;
-      setIsAtBottom(isBottom);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   useEffect(() => {
     const showGifTimer = setTimeout(() => {
@@ -247,18 +232,6 @@ export default function Home() {
       <ProjectsSection />
       <GithubGraph />
       <TechStackSection />
-
-      {/* Dock: Floating while scrolling, sticks above footer when at the bottom */}
-      <div
-        className={`flex justify-center transition-all duration-500 ${
-          isAtBottom
-            ? "relative bottom-0 left-0 translate-x-0 my-4 z-10 opacity-100"
-            : "fixed bottom-6 left-1/2 -translate-x-1/2 z-50 opacity-100"
-        }`}
-      >
-        <DockDemo />
-      </div>
-
       <FooterSection />
     </main>
   );

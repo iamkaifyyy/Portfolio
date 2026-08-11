@@ -29,7 +29,6 @@ export const metadata: Metadata = {
 import { CustomCursor } from "@/components/ui/custom-cursor";
 import { LenisProvider } from "@/components/LenisProvider";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
-import { StickyFooterBar } from "@/components/ui/sticky-footer-bar";
 
 export default function RootLayout({
   children,
@@ -41,12 +40,11 @@ export default function RootLayout({
       lang="en"
       className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
     >
-      <body className="min-h-full flex flex-col bg-white text-zinc-900">
+      <body className="min-h-full flex flex-col">
         <LenisProvider>
           <ScrollProgress />
           <CustomCursor />
           {children}
-          <StickyFooterBar />
         </LenisProvider>
       </body>
     </html>

@@ -5,10 +5,31 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Runtime dark mode — toggling html.dark class makes the whole page dark */
+html,
+body {
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+html {
+  color-scheme: light;
+  background-color: #ffffff;
+  color: #0a0a0a;
+}
+
+html.dark {
+  color-scheme: dark;
+  background-color: #0a0a0a;
+  color: #fafafa;
+}
+
+html.dark body {
+  background-color: #0a0a0a;
+  color: #fafafa;
+}
+
 @layer base {
   body {
-    background-color: #ffffff;
-    color: #171717;
     @apply bg-background text-foreground;
   }
   * {
