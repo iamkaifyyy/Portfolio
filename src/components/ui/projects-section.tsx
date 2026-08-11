@@ -1,71 +1,98 @@
-"use client";
+'use client'
 
-import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { ExternalLink, X } from "lucide-react";
-import { PROJECTS, DESIGNS } from "./projects-data";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence, type Variants } from 'motion/react'
+import { X, ExternalLink } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { PROJECTS, DESIGNS } from './projects-data'
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   MorphingDialog,
   MorphingDialogTrigger,
-  MorphingDialogContainer,
   MorphingDialogContent,
   MorphingDialogClose,
-} from "@/components/ui/morphing-dialog";
+  MorphingDialogContainer,
+} from '@/components/ui/morphing-dialog'
+
+/* -------------------------------------------------------------------------- */
+/*                               PROJECT MEDIA COMPONENTS                      */
+/* -------------------------------------------------------------------------- */
 
 function ProjectVideo({ src }: { src: string }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const modalVideoRef = useRef<HTMLVideoElement>(null);
+  const [isLoading, setIsLoading] = useState(true)
+  const [isVideoReady, setIsVideoReady] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const modalVideoRef = useRef<HTMLVideoElement>(null)
 
   const applySlowPlayback = () => {
-    if (videoRef.current) videoRef.current.playbackRate = 0.25;
-    if (modalVideoRef.current) modalVideoRef.current.playbackRate = 0.25;
-  };
+    if (videoRef.current) videoRef.current.playbackRate = 0.3
+    if (modalVideoRef.current) modalVideoRef.current.playbackRate = 0.3
+  }
 
   useEffect(() => {
-    applySlowPlayback();
-  }, [src]);
+    applySlowPlayback()
+  }, [src])
+
+  useEffect(() => {
+    const minLoadingTimeout = setTimeout(() => {
+      if (isVideoReady) {
+        setIsLoading(false)
+      }
+    }, 400)
+
+    return () => clearTimeout(minLoadingTimeout)
+  }, [isVideoReady])
 
   return (
     <MorphingDialog
       transition={{
-        type: "spring",
+        type: 'spring',
         bounce: 0,
-        duration: 0.3,
+        duration: 0.35,
       }}
     >
       <MorphingDialogTrigger>
-        <div className="relative aspect-video w-full">
+        <motion.div
+          whileHover={{ scale: 1.015 }}
+          transition={{ duration: 0.2 }}
+          className="relative aspect-video w-full overflow-hidden rounded-xl"
+        >
           <AnimatePresence mode="wait">
             {isLoading && (
               <motion.div
                 initial={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.3 }}
                 className="absolute inset-0 z-10"
               >
                 <Skeleton className="h-full w-full rounded-xl" />
               </motion.div>
             )}
           </AnimatePresence>
-          <video
-            ref={videoRef}
-            src={src}
-            autoPlay
-            loop
-            muted
-            playsInline
-            onLoadedData={() => {
-              setIsLoading(false);
-              applySlowPlayback();
-            }}
-            onLoadedMetadata={applySlowPlayback}
-            className="aspect-video w-full cursor-zoom-in rounded-xl object-cover"
-          />
-        </div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isLoading ? 0 : 1 }}
+            transition={{ duration: 0.4 }}
+          >
+            <video
+              ref={videoRef}
+              src={src}
+              autoPlay
+              loop
+              muted
+              playsInline
+              onLoadedData={() => {
+                setIsVideoReady(true)
+                applySlowPlayback()
+              }}
+              onLoadedMetadata={applySlowPlayback}
+              className="aspect-video w-full cursor-zoom-in rounded-xl object-cover"
+            />
+          </motion.div>
+        </motion.div>
       </MorphingDialogTrigger>
 
+      {/* Fullscreen Expanded Video Modal */}
       <MorphingDialogContainer>
         <MorphingDialogContent className="relative aspect-video rounded-2xl bg-zinc-50 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950 dark:ring-zinc-800/50">
           <video
@@ -80,314 +107,300 @@ function ProjectVideo({ src }: { src: string }) {
             className="aspect-video h-[50vh] w-full rounded-xl md:h-[70vh] object-cover"
           />
         </MorphingDialogContent>
-        <MorphingDialogClose className="fixed top-6 right-6 h-fit w-fit rounded-full bg-white dark:bg-zinc-800 p-1 shadow-md hover:scale-110 transition-transform">
-          <X className="h-5 w-5 text-zinc-500 dark:text-zinc-400" />
+        <MorphingDialogClose
+          className="fixed top-6 right-6 h-fit w-fit rounded-full bg-white dark:bg-zinc-800 p-1.5 shadow-lg hover:scale-110 active:scale-95 transition-transform"
+          variants={{
+            initial: { opacity: 0, scale: 0.8 },
+            animate: {
+              opacity: 1,
+              scale: 1,
+              transition: { delay: 0.2, duration: 0.15 },
+            },
+            exit: { opacity: 0, scale: 0.8, transition: { duration: 0.1 } },
+          }}
+        >
+          <X className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
         </MorphingDialogClose>
       </MorphingDialogContainer>
     </MorphingDialog>
-  );
+  )
 }
 
-function ProjectImage({ src, alt }: { src: string; alt: string }) {
+function ProjectImage({ src }: { src: string }) {
   return (
     <MorphingDialog
       transition={{
-        type: "spring",
+        type: 'spring',
         bounce: 0,
-        duration: 0.3,
+        duration: 0.35,
       }}
     >
       <MorphingDialogTrigger>
-        <div className="relative aspect-video w-full">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+        <motion.div
+          whileHover={{ scale: 1.015 }}
+          transition={{ duration: 0.2 }}
+          className="relative aspect-video w-full overflow-hidden rounded-xl bg-black"
+        >
+          <motion.img
             src={src}
-            alt={alt}
-            className="aspect-video w-full cursor-zoom-in rounded-xl object-contain bg-black"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
+            className="aspect-video w-full rounded-xl object-contain bg-black cursor-zoom-in"
           />
-        </div>
+        </motion.div>
       </MorphingDialogTrigger>
+
+      {/* Fullscreen Expanded Image Modal */}
       <MorphingDialogContainer>
         <MorphingDialogContent className="relative aspect-video rounded-2xl bg-zinc-50 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950 dark:ring-zinc-800/50">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={src}
-            alt={alt}
+            alt="Project Showcase"
             className="aspect-video h-[50vh] w-full rounded-xl md:h-[70vh] object-contain bg-black"
           />
         </MorphingDialogContent>
-        <MorphingDialogClose className="fixed top-6 right-6 h-fit w-fit rounded-full bg-white dark:bg-zinc-800 p-1 shadow-md">
-          <X className="h-5 w-5 text-zinc-500 dark:text-zinc-400" />
+        <MorphingDialogClose
+          className="fixed top-6 right-6 h-fit w-fit rounded-full bg-white dark:bg-zinc-800 p-1.5 shadow-lg hover:scale-110 active:scale-95 transition-transform"
+          variants={{
+            initial: { opacity: 0, scale: 0.8 },
+            animate: {
+              opacity: 1,
+              scale: 1,
+              transition: { delay: 0.2, duration: 0.15 },
+            },
+            exit: { opacity: 0, scale: 0.8, transition: { duration: 0.1 } },
+          }}
+        >
+          <X className="h-5 w-5 text-zinc-600 dark:text-zinc-300" />
         </MorphingDialogClose>
       </MorphingDialogContainer>
     </MorphingDialog>
-  );
+  )
+}
+
+/* -------------------------------------------------------------------------- */
+/*                           MAIN PROJECTS & DESIGN SECTION                   */
+/* -------------------------------------------------------------------------- */
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+}
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 15, filter: 'blur(4px)' },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: 'blur(0px)',
+    transition: { duration: 0.35, ease: 'easeOut' },
+  },
+  exit: {
+    opacity: 0,
+    y: -15,
+    filter: 'blur(4px)',
+    transition: { duration: 0.25 },
+  },
 }
 
 export function ProjectsSection() {
-  const [activeTab, setActiveTab] = useState<"projects" | "design">("projects");
-
-  const web2Projects = PROJECTS.filter((p) => p.category === "web2");
-  const web3Projects = PROJECTS.filter((p) => p.category === "web3");
+  const [activeTab, setActiveTab] = useState<'projects' | 'design'>('projects')
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      transition={{ duration: 0.3 }}
+      initial={{ opacity: 0, y: 20, filter: 'blur(8px)' }}
+      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      transition={{ duration: 0.4 }}
       className="w-full max-w-2xl mx-auto px-4 md:px-0"
     >
-      {/* Centered Tab Switcher Header (Projects / Design) */}
+      {/* Category Tab Buttons */}
       <div className="flex justify-center gap-8 mb-8">
         <button
-          onClick={() => setActiveTab("projects")}
-          className={`text-base font-medium relative cursor-pointer transition-colors ${
-            activeTab === "projects"
-              ? "text-zinc-900 dark:text-zinc-50"
-              : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50"
-          }`}
+          onClick={() => setActiveTab('projects')}
+          className={cn(
+            'text-lg font-medium relative cursor-pointer transition-colors',
+            activeTab === 'projects'
+              ? 'text-zinc-900 dark:text-zinc-50'
+              : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50'
+          )}
         >
           Projects
-          {activeTab === "projects" && (
+          {activeTab === 'projects' && (
             <motion.div
               layoutId="activeTab"
               className="absolute -bottom-2 left-0 right-0 h-0.5 bg-zinc-900 dark:bg-zinc-50"
               initial={false}
-              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
             />
           )}
         </button>
+
         <button
-          onClick={() => setActiveTab("design")}
-          className={`text-base font-medium relative cursor-pointer transition-colors ${
-            activeTab === "design"
-              ? "text-zinc-900 dark:text-zinc-50"
-              : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50"
-          }`}
+          onClick={() => setActiveTab('design')}
+          className={cn(
+            'text-lg font-medium relative cursor-pointer transition-colors',
+            activeTab === 'design'
+              ? 'text-zinc-900 dark:text-zinc-50'
+              : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50'
+          )}
         >
           Design
-          {activeTab === "design" && (
+          {activeTab === 'design' && (
             <motion.div
               layoutId="activeTab"
               className="absolute -bottom-2 left-0 right-0 h-0.5 bg-zinc-900 dark:bg-zinc-50"
               initial={false}
-              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
             />
           )}
         </button>
       </div>
 
-      {/* Grid Layout */}
+      {/* Tab Panels */}
       <AnimatePresence mode="wait">
-        {activeTab === "projects" ? (
+        {/* PROJECTS TAB */}
+        {activeTab === 'projects' && (
           <motion.div
             key="projects"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="space-y-8"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            className="grid grid-cols-1 gap-6 sm:grid-cols-2"
           >
-            {/* Web2 Projects Section */}
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                  Web2
-                </span>
-                <div className="h-[1px] flex-1 bg-zinc-200/60 dark:bg-zinc-800/60" />
-              </div>
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                {web2Projects.map((project) => (
-                  <motion.div
-                    key={project.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="space-y-2"
-                  >
-                    {/* Media Card Outer Wrapper */}
-                    <div className="relative rounded-2xl bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50">
-                      {project.type === "image" && project.image ? (
-                        <ProjectImage src={project.image} alt={project.name} />
-                      ) : project.video ? (
-                        <ProjectVideo src={project.video} />
-                      ) : null}
-                    </div>
+            {PROJECTS.map((project) => (
+              <motion.div
+                key={project.id || project.name}
+                variants={cardVariants}
+                whileHover={{ y: -3 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-2 group/card"
+              >
+                {/* Media Outer Box */}
+                <div
+                  className={cn(
+                    'relative rounded-2xl bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50 transition-shadow duration-300 group-hover/card:shadow-md',
+                    project.tag?.includes('Grant') && 'ring-emerald-500/40 dark:ring-emerald-500/40',
+                    project.tag === 'Building' && 'ring-blue-500/40 dark:ring-blue-500/40'
+                  )}
+                >
+                  {project.type === 'image' && project.image ? (
+                    <ProjectImage src={project.image} />
+                  ) : (
+                    <ProjectVideo src={project.video || ''} />
+                  )}
+                </div>
 
-                    {/* Card Details Text */}
-                    <div className="px-1">
-                      {/* Title */}
-                      <div className="flex items-center gap-3 mb-1">
-                        <a
-                          className="font-sans group relative inline-block font-[450] text-sm md:text-base text-zinc-900 dark:text-zinc-50 cursor-pointer"
-                          href={project.link || "#"}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {project.name}
-                          <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
-                        </a>
-                      </div>
+                {/* Info & Links */}
+                <div className="px-1">
+                  <div className="flex items-center gap-3 mb-1 flex-wrap">
+                    <a
+                      className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50"
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {project.name}
+                      <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
+                    </a>
 
-                      {/* Github & View Links */}
-                      <p className="mb-1 text-xs md:text-sm">
-                        {project.github && (
-                          <a
-                            className="font-sans group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50 mr-4 cursor-pointer"
-                            href={project.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Github
-                            <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
-                          </a>
+                    {project.tag && (
+                      <motion.span
+                        whileHover={{ scale: 1.05 }}
+                        className={cn(
+                          'inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset cursor-pointer transition-colors',
+                          project.tag.includes('Grant') &&
+                            'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 ring-green-600/20 dark:ring-green-500/30',
+                          project.tag === 'Building' &&
+                            'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 ring-blue-600/20 dark:ring-blue-500/30',
+                          !project.tag.includes('Grant') && project.tag !== 'Building' &&
+                            'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 ring-zinc-500/20'
                         )}
-                        {project.link && (
-                          <a
-                            className="font-sans group relative inline-flex items-center font-[450] text-zinc-900 dark:text-zinc-50 cursor-pointer"
-                            href={project.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            View <ExternalLink className="inline w-3.5 h-3.5 ml-0.5" />
-                            <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
-                          </a>
-                        )}
-                      </p>
+                      >
+                        {project.tag}
+                      </motion.span>
+                    )}
+                  </div>
 
-                      {/* Description */}
-                      <p className="text-sm font-normal font-sans text-zinc-600 dark:text-zinc-400 leading-snug">
-                        {project.description}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
+                  <p>
+                    <a
+                      className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50 mr-4 text-sm"
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Github
+                      <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
+                    </a>
+                    <a
+                      className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50 text-sm"
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      View <ExternalLink className="inline-block ml-0.5 h-3.5 w-3.5" />
+                      <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
+                    </a>
+                  </p>
 
-            {/* Web3 Heading in Between */}
-            <div>
-              <div className="flex items-center gap-2 mb-4 pt-2">
-                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                  Web3
-                </span>
-                <div className="h-[1px] flex-1 bg-zinc-200/60 dark:bg-zinc-800/60" />
-              </div>
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                {web3Projects.map((project) => (
-                  <motion.div
-                    key={project.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="space-y-2"
-                  >
-                    {/* Media Card Outer Wrapper */}
-                    <div className="relative rounded-2xl bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50">
-                      {project.type === "image" && project.image ? (
-                        <ProjectImage src={project.image} alt={project.name} />
-                      ) : project.video ? (
-                        <ProjectVideo src={project.video} />
-                      ) : null}
-                    </div>
-
-                    {/* Card Details Text */}
-                    <div className="px-1">
-                      {/* Title */}
-                      <div className="flex items-center gap-3 mb-1">
-                        <a
-                          className="font-sans group relative inline-block font-[450] text-sm md:text-base text-zinc-900 dark:text-zinc-50 cursor-pointer"
-                          href={project.link || "#"}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {project.name}
-                          <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
-                        </a>
-                      </div>
-
-                      {/* Github & View Links */}
-                      <p className="mb-1 text-xs md:text-sm">
-                        {project.github && (
-                          <a
-                            className="font-sans group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50 mr-4 cursor-pointer"
-                            href={project.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Github
-                            <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
-                          </a>
-                        )}
-                        {project.link && (
-                          <a
-                            className="font-sans group relative inline-flex items-center font-[450] text-zinc-900 dark:text-zinc-50 cursor-pointer"
-                            href={project.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            View <ExternalLink className="inline w-3.5 h-3.5 ml-0.5" />
-                            <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
-                          </a>
-                        )}
-                      </p>
-
-                      {/* Description */}
-                      <p className="text-sm font-normal font-sans text-zinc-600 dark:text-zinc-400 leading-snug">
-                        {project.description}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
+                  <p className="text-base text-zinc-600 dark:text-zinc-400 mt-1">
+                    {project.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
           </motion.div>
-        ) : (
+        )}
+
+        {/* DESIGN TAB */}
+        {activeTab === 'design' && (
           <motion.div
-            key="design"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
+            key="designs"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
             className="grid grid-cols-1 gap-6 sm:grid-cols-2"
           >
             {DESIGNS.map((design) => (
               <motion.div
-                key={design.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="space-y-2"
+                key={design.id || design.name}
+                variants={cardVariants}
+                whileHover={{ y: -3 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-2 group/card"
               >
-                <div className="relative rounded-2xl bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50">
-                  {design.video && <ProjectVideo src={design.video} />}
+                <div className="relative rounded-2xl bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50 transition-shadow duration-300 group-hover/card:shadow-md">
+                  <ProjectVideo src={design.video} />
                 </div>
                 <div className="px-1">
                   <div className="flex items-center gap-3 mb-1">
                     <a
-                      className="font-sans group relative inline-block font-[450] text-sm md:text-base text-zinc-900 dark:text-zinc-50 cursor-pointer"
-                      href={design.link || "#"}
+                      className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-50"
+                      href={design.link}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       {design.name}
                       <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
                     </a>
-                  </div>
-                  <p className="mb-1 text-xs md:text-sm">
-                    {design.link && (
-                      <a
-                        className="font-sans group relative inline-flex items-center font-[450] text-zinc-900 dark:text-zinc-50 cursor-pointer"
-                        href={design.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    {design.tag && (
+                      <motion.span
+                        whileHover={{ scale: 1.05 }}
+                        className="inline-flex items-center rounded-full bg-purple-50 dark:bg-purple-900/30 px-2 py-1 text-xs font-medium text-purple-700 dark:text-purple-300 ring-1 ring-inset ring-purple-600/20 dark:ring-purple-500/30 cursor-pointer"
                       >
-                        View <ExternalLink className="inline w-3.5 h-3.5 ml-0.5" />
-                        <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 dark:bg-zinc-50 transition-all duration-200 group-hover:max-w-full"></span>
-                      </a>
+                        {design.tag}
+                      </motion.span>
                     )}
-                  </p>
-                  <p className="text-sm font-normal font-sans text-zinc-600 dark:text-zinc-400 leading-snug">
+                  </div>
+                  <p className="text-base text-zinc-600 dark:text-zinc-400 mt-2">
                     {design.description}
                   </p>
                 </div>
@@ -397,5 +410,5 @@ export function ProjectsSection() {
         )}
       </AnimatePresence>
     </motion.section>
-  );
+  )
 }
