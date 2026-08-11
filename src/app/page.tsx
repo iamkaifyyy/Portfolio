@@ -9,6 +9,7 @@ import { TextEffect } from "@/components/ui/text-effect";
 import { ProjectsSection } from "@/components/ui/projects-section";
 import { GithubGraph } from "@/components/ui/github-graph";
 import { TechStackSection } from "@/components/ui/tech-stack-section";
+import { FooterSection } from "@/components/ui/footer-section";
 import { Sparkles } from "lucide-react";
 
 export default function Home() {
@@ -231,6 +232,7 @@ export default function Home() {
       <ProjectsSection />
       <GithubGraph />
       <TechStackSection />
+      <FooterSection />
 
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
         <DockDemo />
