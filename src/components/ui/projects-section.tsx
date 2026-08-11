@@ -3,57 +3,43 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ExternalLink } from "lucide-react";
-import { PROJECTS_DATA, DESIGNS_DATA } from "./projects-data";
+import { PROJECTS_DATA } from "./projects-data";
 
 export function ProjectsSection() {
-  const [activeTab, setActiveTab] = useState<"projects" | "design">("projects");
+  const [activeTab, setActiveTab] = useState<"all" | "web2" | "web3">("all");
 
-  const items = (
-    activeTab === "projects" ? PROJECTS_DATA : DESIGNS_DATA
-  ).filter((item) => Boolean(item.videoUrl));
+  const filteredProjects =
+    activeTab === "all"
+      ? PROJECTS_DATA
+      : PROJECTS_DATA.filter((p) => p.category === activeTab);
 
   return (
     <section className="w-full max-w-4xl mx-auto my-12 px-4">
-      {/* Top Tab Switcher */}
-      <div className="flex items-center justify-center gap-8 border-b border-zinc-200/80 dark:border-zinc-800/80 mb-10 pb-2">
-        <button
-          onClick={() => setActiveTab("projects")}
-          className={`relative text-base font-semibold transition-colors cursor-pointer pb-2 ${
-            activeTab === "projects"
-              ? "text-zinc-900 dark:text-zinc-100"
-              : "text-zinc-400 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
-          }`}
-        >
-          Projects
-          {activeTab === "projects" && (
-            <motion.div
-              layoutId="projectsTabUnderline"
-              className="absolute bottom-0 left-0 right-0 h-0.5 bg-zinc-900 dark:bg-zinc-100 rounded-full"
-              transition={{ type: "spring", stiffness: 400, damping: 35 }}
-            />
-          )}
-        </button>
-
-        <button
-          onClick={() => setActiveTab("design")}
-          className={`relative text-base font-semibold transition-colors cursor-pointer pb-2 ${
-            activeTab === "design"
-              ? "text-zinc-900 dark:text-zinc-100"
-              : "text-zinc-400 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
-          }`}
-        >
-          Design
-          {activeTab === "design" && (
-            <motion.div
-              layoutId="projectsTabUnderline"
-              className="absolute bottom-0 left-0 right-0 h-0.5 bg-zinc-900 dark:bg-zinc-100 rounded-full"
-              transition={{ type: "spring", stiffness: 400, damping: 35 }}
-            />
-          )}
-        </button>
+      {/* Top Tab Switcher (All / Web2 / Web3) */}
+      <div className="flex items-center justify-center gap-6 md:gap-8 border-b border-zinc-200/80 dark:border-zinc-800/80 mb-10 pb-2">
+        {(["all", "web2", "web3"] as const).map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`relative text-base font-semibold capitalize transition-colors cursor-pointer pb-2 ${
+              activeTab === tab
+                ? "text-zinc-900 dark:text-zinc-100"
+                : "text-zinc-400 dark:text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+            }`}
+          >
+            {tab === "all" ? "All Projects" : tab.toUpperCase()}
+            {activeTab === tab && (
+              <motion.div
+                layoutId="projectsTabUnderline"
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-zinc-900 dark:bg-zinc-100 rounded-full"
+                transition={{ type: "spring", stiffness: 400, damping: 35 }}
+              />
+            )}
+          </button>
+        ))}
       </div>
 
-      {/* Grid Layout */}
+      {/* Grid Layout (6 Projects) */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeTab}
@@ -63,7 +49,7 @@ export function ProjectsSection() {
           transition={{ duration: 0.2 }}
           className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10"
         >
-          {items.map((item) => (
+          {filteredProjects.map((item) => (
             <div key={item.id} className="flex flex-col group text-left">
               {/* Media Preview Box */}
               {item.videoUrl ? (
@@ -96,9 +82,7 @@ export function ProjectsSection() {
                 {item.tag && (
                   <span
                     className={`px-2.5 py-0.5 rounded-full text-[11px] font-medium border ${
-                      item.tag.includes("Building")
-                        ? "bg-blue-100/90 dark:bg-blue-950/70 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800"
-                        : item.tag.includes("Proof")
+                      item.category === "web3"
                         ? "bg-purple-100/90 dark:bg-purple-950/70 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800"
                         : "bg-emerald-100/90 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800"
                     }`}
