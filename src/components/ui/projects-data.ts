@@ -67,4 +67,15 @@ export const PROJECTS: Project[] = [
     tag: "🏆 1st Prize Winner",
     tech: ["React.js", "Node.js", "Express.js", "MongoDB", "TypeScript"],
   },
+  {
+    id: "project-6",
+    name: "Lumina",
+    category: "web3",
+    description: "Proof-of-Progress decentralized platform built on Solana for verified achievements.",
+    githubUrl: "https://github.com/iamkaifyyy/lumina.git",
+    liveUrl: "https://lumina.example.com",
+    videoUrl: "/recordings/lumina.mp4",
+    tag: "Building",
+    tech: ["Solana", "Solidity", "React", "Wagmi", "Tailwind CSS"],
+  },
 ];
