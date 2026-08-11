@@ -49,15 +49,17 @@ export default function ResumePage() {
         </div>
 
         {/* Clean PDF Document View Only */}
-        <div className="w-full max-w-2xl mx-auto rounded-2xl overflow-hidden border border-zinc-200/80 dark:border-zinc-800/80 shadow-lg bg-white dark:bg-zinc-900 relative">
-          <Image
-            src="/kaify-page-1.png"
-            alt="Mohd Kaif Resume"
-            width={1200}
-            height={1697}
-            priority
-            className="w-full h-auto object-contain select-none"
-          />
+        <div className="w-full max-w-2xl mx-auto flex flex-col gap-6">
+          <div className="w-full rounded-2xl overflow-hidden border border-zinc-200/80 dark:border-zinc-800/80 shadow-lg bg-white dark:bg-zinc-900 relative">
+            <Image
+              src="/kaify-page-1.png"
+              alt="Mohd Kaif Resume"
+              width={1200}
+              height={1697}
+              priority
+              className="w-full h-auto object-contain select-none"
+            />
+          </div>
         </div>
       </main>
     </div>
