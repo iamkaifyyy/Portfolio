@@ -9,14 +9,15 @@ export function HeaderNav() {
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const shouldBeDark = savedTheme === "dark" || (!savedTheme && prefersDark);
 
-    if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
-      setIsDark(true);
+    if (shouldBeDark) {
       document.documentElement.classList.add("dark");
     } else {
-      setIsDark(false);
       document.documentElement.classList.remove("dark");
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsDark(shouldBeDark);
   }, []);
 
   const toggleTheme = () => {

@@ -21,16 +21,23 @@ export const metadata: Metadata = {
 };
 
 import { CustomCursor } from "@/components/ui/custom-cursor";
+import { LenisProvider } from "@/components/LenisProvider";
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html
       lang="en"
       className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
     >
       <body className="min-h-full flex flex-col bg-white text-zinc-900">
-        <CustomCursor />
-        {children}
+        <LenisProvider>
+          <CustomCursor />
+          {children}
+        </LenisProvider>
       </body>
     </html>
   );

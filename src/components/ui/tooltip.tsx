@@ -22,6 +22,7 @@ function Tooltip({ ...props }: TooltipPrimitive.Root.Props) {
 }
 
 function TooltipTrigger({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   asChild,
   ...props
 }: TooltipPrimitive.Trigger.Props & { asChild?: boolean }) {

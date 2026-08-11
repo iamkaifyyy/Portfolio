@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { createTimeline, stagger, splitText } from "animejs";
 import { DockDemo } from "@/components/ui/dock-demo";
+import { TextEffect } from "@/components/ui/text-effect";
 
 export default function Home() {
   const [isFading, setIsFading] = useState(false);
@@ -65,9 +66,14 @@ export default function Home() {
       <div className="flex items-start justify-center gap-6 md:gap-10">
         <div className="flex flex-col items-start max-w-md">
           <div className="flex items-baseline gap-3">
-            <h1 className="font-bold text-3xl md:text-4xl tracking-tight text-zinc-900 dark:text-zinc-100">
+            <TextEffect
+              as="h1"
+              per="char"
+              preset="fade-in-blur"
+              className="font-bold text-3xl md:text-4xl tracking-tight text-zinc-900 dark:text-zinc-100"
+            >
               Kaify
-            </h1>
+            </TextEffect>
             <span
               ref={japaneseRef}
               className={`text-sm md:text-base font-bold text-zinc-400 dark:text-zinc-500 tracking-widest transition-all duration-700 inline-block overflow-hidden ${
@@ -77,9 +83,15 @@ export default function Home() {
               カイフィー
             </span>
           </div>
-          <h2 className="text-lg md:text-xl font-medium text-zinc-600 dark:text-zinc-400 mt-1">
+          <TextEffect
+            as="h2"
+            per="word"
+            preset="fade-in-blur"
+            delay={0.2}
+            className="text-lg md:text-xl font-medium text-zinc-600 dark:text-zinc-400 mt-1"
+          >
             Web2 & Web3 Developer
-          </h2>
+          </TextEffect>
           <p className="mt-4 text-sm md:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
             Full-stack Web2 & Web3 developer building AI-powered products at
             Onewave Studio, crafting high-performance dApps and smart contracts on
@@ -92,7 +104,7 @@ export default function Home() {
             When I&apos;m not coding, I&apos;m at the gym or immersed in music.
           </p>
 
-          {/* Green Badge for Available for work + Plain Text Description */}
+          {}
           <div className="mt-4 flex items-center gap-3 flex-wrap">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-100/90 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-800/80 cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-emerald-200 dark:hover:bg-emerald-900/80 hover:border-emerald-400 hover:shadow-sm group/badge shrink-0">
               <span className="relative flex h-2 w-2">
