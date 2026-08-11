@@ -53,7 +53,7 @@ export function ProjectsSection() {
             <div key={item.id} className="flex flex-col group text-left">
               {/* Media Preview Box */}
               {item.videoUrl ? (
-                <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden mb-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800/60 shadow-xs group-hover:shadow-md transition-shadow">
+                <div className="relative aspect-video w-full rounded-2xl overflow-hidden mb-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800/60 shadow-xs group-hover:shadow-md transition-shadow">
                   <video
                     src={item.videoUrl}
                     autoPlay
@@ -64,7 +64,7 @@ export function ProjectsSection() {
                   />
                 </div>
               ) : item.imageUrl ? (
-                <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden mb-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800/60 shadow-xs group-hover:shadow-md transition-shadow">
+                <div className="relative aspect-video w-full rounded-2xl overflow-hidden mb-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800/60 shadow-xs group-hover:shadow-md transition-shadow">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={item.imageUrl}
