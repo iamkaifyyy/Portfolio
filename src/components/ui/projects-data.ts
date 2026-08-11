@@ -142,6 +142,17 @@ export const PROJECTS_DATA: Project[] = [
     tag: "Solana & EVM",
     tech: ["Solana", "Ethereum", "React", "Ethers.js"],
   },
+  {
+    id: "project-ui",
+    name: "Unreal UI",
+    category: "projects",
+    description: "Fast, Flexible, and Fully Customizable UI Components.",
+    githubUrl: "https://github.com/iamkaifyyy/Unreal-UI-",
+    liveUrl: "https://onewavestudio.vercel.app/",
+    videoUrl: "/recordings/ui.mp4",
+    tag: "Building",
+    tech: ["React.js", "Tailwind CSS", "TypeScript"],
+  },
 ];
 
 export const DESIGNS_DATA: Project[] = [

@@ -8,7 +8,9 @@ import { PROJECTS_DATA, DESIGNS_DATA } from "./projects-data";
 export function ProjectsSection() {
   const [activeTab, setActiveTab] = useState<"projects" | "design">("projects");
 
-  const items = activeTab === "projects" ? PROJECTS_DATA : DESIGNS_DATA;
+  const items = (
+    activeTab === "projects" ? PROJECTS_DATA : DESIGNS_DATA
+  ).filter((item) => Boolean(item.videoUrl));
 
   return (
     <section className="w-full max-w-4xl mx-auto my-12 px-4">
