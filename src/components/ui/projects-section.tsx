@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'motion/react'
 import { X, ExternalLink } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { PROJECTS, DESIGNS } from './projects-data'
-import { Skeleton } from '@/components/ui/skeleton'
 import {
   MorphingDialog,
   MorphingDialogTrigger,
@@ -19,7 +18,6 @@ import {
 /* -------------------------------------------------------------------------- */
 
 function ProjectVideo({ src }: { src: string }) {
-  const [isLoading, setIsLoading] = useState(true)
   const videoRef = useRef<HTMLVideoElement>(null)
   const modalVideoRef = useRef<HTMLVideoElement>(null)
 
@@ -44,13 +42,8 @@ function ProjectVideo({ src }: { src: string }) {
         <motion.div
           whileHover={{ scale: 1.01 }}
           transition={{ duration: 0.2 }}
-          className="relative aspect-video w-full overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-900"
+          className="relative aspect-video w-full overflow-hidden rounded-xl"
         >
-          {isLoading && (
-            <div className="absolute inset-0 z-10">
-              <Skeleton className="h-full w-full rounded-xl" />
-            </div>
-          )}
           <video
             ref={videoRef}
             src={src}
@@ -58,19 +51,16 @@ function ProjectVideo({ src }: { src: string }) {
             loop
             muted
             playsInline
-            onLoadedData={() => {
-              setIsLoading(false)
-              applySlowPlayback()
-            }}
+            onLoadedData={applySlowPlayback}
             onLoadedMetadata={applySlowPlayback}
             className="aspect-video w-full cursor-zoom-in rounded-xl object-cover"
           />
         </motion.div>
       </MorphingDialogTrigger>
 
-      {/* Fullscreen Expanded Video Modal with Top, Bottom, Left, Right Padding */}
+      {/* Fullscreen Expanded Video Modal */}
       <MorphingDialogContainer>
-        <MorphingDialogContent className="relative aspect-video rounded-3xl bg-zinc-100/90 dark:bg-zinc-900/90 p-3 md:p-4 border border-zinc-200/80 dark:border-zinc-800/80 shadow-2xl backdrop-blur-md">
+        <MorphingDialogContent className="relative aspect-video rounded-2xl p-1 bg-black/90 shadow-2xl">
           <video
             ref={modalVideoRef}
             src={src}
@@ -80,7 +70,7 @@ function ProjectVideo({ src }: { src: string }) {
             playsInline
             onLoadedMetadata={applySlowPlayback}
             onLoadedData={applySlowPlayback}
-            className="aspect-video h-[50vh] w-full rounded-2xl md:h-[70vh] object-cover shadow-md"
+            className="aspect-video h-[50vh] w-full rounded-xl md:h-[70vh] object-cover"
           />
         </MorphingDialogContent>
         <MorphingDialogClose
@@ -126,14 +116,14 @@ function ProjectImage({ src }: { src: string }) {
         </motion.div>
       </MorphingDialogTrigger>
 
-      {/* Fullscreen Expanded Image Modal with Top, Bottom, Left, Right Padding */}
+      {/* Fullscreen Expanded Image Modal */}
       <MorphingDialogContainer>
-        <MorphingDialogContent className="relative aspect-video rounded-3xl bg-zinc-100/90 dark:bg-zinc-900/90 p-3 md:p-4 border border-zinc-200/80 dark:border-zinc-800/80 shadow-2xl backdrop-blur-md">
+        <MorphingDialogContent className="relative aspect-video rounded-2xl p-1 bg-black/90 shadow-2xl">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={src}
             alt="Project Showcase"
-            className="aspect-video h-[50vh] w-full rounded-2xl md:h-[70vh] object-contain bg-black shadow-md"
+            className="aspect-video h-[50vh] w-full rounded-xl md:h-[70vh] object-contain bg-black"
           />
         </MorphingDialogContent>
         <MorphingDialogClose
@@ -224,10 +214,10 @@ export function ProjectsSection() {
                 transition={{ duration: 0.2 }}
                 className="space-y-2 group/card"
               >
-                {/* Media Outer Box with Padded Top, Bottom, Left, Right Frame */}
+                {/* Media Outer Box */}
                 <div
                   className={cn(
-                    'relative rounded-2xl bg-zinc-50/40 p-1.5 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50 transition-all duration-300 group-hover/card:ring-zinc-300 dark:group-hover/card:ring-zinc-700',
+                    'relative rounded-2xl p-1 ring-1 ring-zinc-200/50 ring-inset dark:ring-zinc-800/50 transition-all duration-300 group-hover/card:ring-zinc-300 dark:group-hover/card:ring-zinc-700',
                     project.tag?.includes('Grant') && 'ring-emerald-500/40 dark:ring-emerald-500/40',
                     project.tag === 'Building' && 'ring-blue-500/40 dark:ring-blue-500/40'
                   )}
@@ -316,8 +306,7 @@ export function ProjectsSection() {
                 transition={{ duration: 0.2 }}
                 className="space-y-2 group/card"
               >
-                {/* Media Outer Box with Padded Top, Bottom, Left, Right Frame */}
-                <div className="relative rounded-2xl bg-zinc-50/40 p-1.5 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50 transition-all duration-300 group-hover/card:ring-zinc-300 dark:group-hover/card:ring-zinc-700">
+                <div className="relative rounded-2xl p-1 ring-1 ring-zinc-200/50 ring-inset dark:ring-zinc-800/50 transition-all duration-300 group-hover/card:ring-zinc-300 dark:group-hover/card:ring-zinc-700">
                   <ProjectVideo src={design.video} />
                 </div>
                 <div className="px-1 pt-1">
