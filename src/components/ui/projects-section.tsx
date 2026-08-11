@@ -1,9 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ExternalLink } from "lucide-react";
 import { PROJECTS_DATA } from "./projects-data";
+
+function VideoPreview({ src }: { src: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = 0.5;
+    }
+  }, [src]);
+
+  return (
+    <video
+      ref={videoRef}
+      src={src}
+      autoPlay
+      loop
+      muted
+      playsInline
+      onLoadedMetadata={() => {
+        if (videoRef.current) {
+          videoRef.current.playbackRate = 0.5;
+        }
+      }}
+      className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
+    />
+  );
+}
 
 export function ProjectsSection() {
   const [activeTab, setActiveTab] = useState<"all" | "web2" | "web3">("all");
@@ -54,14 +81,7 @@ export function ProjectsSection() {
               {/* Media Preview Box */}
               {item.videoUrl ? (
                 <div className="relative aspect-video w-full rounded-2xl overflow-hidden mb-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800/60 shadow-xs group-hover:shadow-md transition-shadow">
-                  <video
-                    src={item.videoUrl}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
-                  />
+                  <VideoPreview src={item.videoUrl} />
                 </div>
               ) : item.imageUrl ? (
                 <div className="relative aspect-video w-full rounded-2xl overflow-hidden mb-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/60 dark:border-zinc-800/60 shadow-xs group-hover:shadow-md transition-shadow">
