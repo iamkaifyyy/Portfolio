@@ -9,6 +9,7 @@ import { ProjectsSection } from "@/components/ui/projects-section";
 import { GithubGraph } from "@/components/ui/github-graph";
 import { TechStackSection } from "@/components/ui/tech-stack-section";
 import { FooterSection } from "@/components/ui/footer-section";
+import { VisitorCounter } from "@/components/ui/visitor-counter";
 import { Sparkles } from "lucide-react";
 
 export default function Home() {
@@ -117,7 +118,6 @@ export default function Home() {
           >
             When I&apos;m not coding, I&apos;m at the gym or immersed in music.
           </p>
-
           <div className="mt-4 flex items-center gap-3 flex-wrap">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-100/90 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-800/80 cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-emerald-200 dark:hover:bg-emerald-900/80 hover:border-emerald-400 hover:shadow-sm group/badge shrink-0">
               <span className="relative flex h-2 w-2">
@@ -126,9 +126,7 @@ export default function Home() {
               </span>
               Available for work
             </span>
-            <span className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400">
-              Remote contracts, freelance & collaborations
-            </span>
+            <VisitorCounter />
           </div>
 
           <div className="mt-10 flex items-center gap-4 flex-wrap">

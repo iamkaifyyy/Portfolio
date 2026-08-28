@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowUp, Sparkles, Sun, Moon } from "lucide-react";
+import { VisitorCounter } from "@/components/ui/visitor-counter";
 
 const TEXTS = [
   "Crafted with Next.js & Tailwind CSS",
@@ -43,13 +44,15 @@ export function FooterSection() {
     <footer className="w-full max-w-2xl mx-auto mt-auto pt-10 pb-6 border-t border-zinc-200/60 dark:border-zinc-800/60 flex flex-col gap-5 text-zinc-600 dark:text-zinc-400 font-sans text-xs md:text-sm">
       {/* Top Row: Creator & Back to Top */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <span className="font-semibold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
             Kaify
             <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
           </span>
           <span className="text-zinc-400">•</span>
           <span>Web2 &amp; Web3 Developer</span>
+          <span className="text-zinc-400">•</span>
+          <VisitorCounter />
         </div>
 
         <button
