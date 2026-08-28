@@ -4,6 +4,8 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { OnewaveBadge } from "@/components/ui/onewave-badge";
+import { FloatingDock } from "@/components/ui/floating-dock";
 import { CustomCursor } from "@/components/ui/custom-cursor";
 import { LenisProvider } from "@/components/LenisProvider";
 import { ScrollProgress } from "@/components/ui/scroll-progress";
@@ -51,9 +53,11 @@ export default function RootLayout({
         >
           <LenisProvider>
             <ScrollProgress />
+            <OnewaveBadge />
             <ThemeToggle />
             <CustomCursor />
             {children}
+            <FloatingDock />
           </LenisProvider>
         </ThemeProvider>
       </body>
