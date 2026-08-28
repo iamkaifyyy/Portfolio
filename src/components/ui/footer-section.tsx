@@ -41,7 +41,7 @@ export function FooterSection() {
   };
 
   return (
-    <footer className="w-full max-w-2xl mx-auto mt-auto pt-10 pb-6 border-t border-zinc-200/60 dark:border-zinc-800/60 flex flex-col gap-5 text-zinc-600 dark:text-zinc-400 font-sans text-xs md:text-sm">
+    <footer className="w-full max-w-2xl mx-auto mt-auto pt-10 pb-6 border-t border-zinc-200/60 dark:border-zinc-800/60 flex flex-col gap-5 text-zinc-600 dark:text-zinc-400 font-sans text-xs md:text-sm px-0 sm:px-4">
       {/* Top Row: Creator & Back to Top */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-2 flex-wrap">
@@ -49,9 +49,9 @@ export function FooterSection() {
             Kaify
             <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
           </span>
-          <span className="text-zinc-400">•</span>
+          <span className="text-zinc-300 dark:text-zinc-700">•</span>
           <span>Web2 &amp; Web3 Developer</span>
-          <span className="text-zinc-400">•</span>
+          <span className="text-zinc-300 dark:text-zinc-700">•</span>
           <VisitorCounter />
         </div>
 
@@ -65,7 +65,7 @@ export function FooterSection() {
       </div>
 
       {/* Middle Row: Social & Contact Links */}
-      <div className="flex items-center gap-4 flex-wrap text-zinc-500 dark:text-zinc-400">
+      <div className="flex items-center gap-x-2.5 gap-y-1.5 flex-wrap text-zinc-500 dark:text-zinc-400 text-xs sm:text-sm">
         <a
           href="https://github.com/iamkaifyyy"
           target="_blank"
@@ -74,7 +74,7 @@ export function FooterSection() {
         >
           GitHub ↗
         </a>
-        <span>•</span>
+        <span className="text-zinc-300 dark:text-zinc-700">•</span>
         <a
           href="https://x.com/iamkaifyyy"
           target="_blank"
@@ -83,7 +83,7 @@ export function FooterSection() {
         >
           Twitter ↗
         </a>
-        <span>•</span>
+        <span className="text-zinc-300 dark:text-zinc-700">•</span>
         <a
           href="https://linkedin.com/in/iamkaifyyy"
           target="_blank"
@@ -92,10 +92,10 @@ export function FooterSection() {
         >
           LinkedIn ↗
         </a>
-        <span>•</span>
+        <span className="text-zinc-300 dark:text-zinc-700">•</span>
         <a
           href="mailto:mkaifm728@gmail.com"
-          className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
+          className="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors break-all"
         >
           mkaifm728@gmail.com
         </a>
@@ -104,7 +104,7 @@ export function FooterSection() {
       {/* Bottom Row: Flipping text + Theme Switcher */}
       <div className="flex items-center justify-between gap-4 pt-3 border-t border-zinc-200/40 dark:border-zinc-800/40">
         {/* Flipping copyright text */}
-        <div className="h-5 overflow-hidden flex items-center">
+        <div className="h-5 overflow-hidden flex items-center max-w-[200px] sm:max-w-xs">
           <AnimatePresence mode="wait">
             <motion.p
               key={textIndex}
@@ -112,7 +112,7 @@ export function FooterSection() {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -14, opacity: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="text-[11px] text-zinc-400 dark:text-zinc-500 whitespace-nowrap select-none"
+              className="text-[10px] sm:text-[11px] text-zinc-400 dark:text-zinc-500 truncate select-none"
             >
               {TEXTS[textIndex]}
             </motion.p>

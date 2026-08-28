@@ -162,7 +162,7 @@ export function GitHubContributionsGraph({
   };
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto rounded-2xl bg-zinc-50/60 dark:bg-zinc-900/40 p-5 ring-1 ring-zinc-200/60 dark:ring-zinc-800/60 backdrop-blur-xs my-8 shadow-xs">
+    <div className="relative w-full max-w-2xl mx-auto rounded-2xl bg-zinc-50/60 dark:bg-zinc-900/40 p-4 sm:p-5 ring-1 ring-zinc-200/60 dark:ring-zinc-800/60 backdrop-blur-xs my-6 sm:my-8 shadow-xs">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm md:text-base font-semibold text-zinc-900 dark:text-zinc-100">GitHub Contributions</h3>
         <a
@@ -191,7 +191,7 @@ export function GitHubContributionsGraph({
         </a>
       </div>
 
-      <div className="overflow-x-auto hide-scrollbar pb-2 flex justify-center">
+      <div className="overflow-x-auto hide-scrollbar pb-2 flex justify-start sm:justify-center w-full">
         <div className="flex gap-0.5 items-end">
           {/* Day labels */}
           <div className="flex flex-col gap-0.5 pr-2 pb-2.5 pt-0.5 justify-end">
@@ -282,7 +282,7 @@ export function GitHubContributionsGraph({
       </div>
 
       {/* Legend */}
-      <div className="flex items-center justify-between mt-5 pt-4 border-t border-zinc-200/50 dark:border-zinc-800/50">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4 mt-5 pt-4 border-t border-zinc-200/50 dark:border-zinc-800/50">
         {data.total && (
           <div className="text-sm text-zinc-600 dark:text-zinc-400">
             <span className="font-medium text-zinc-900 dark:text-zinc-50">
