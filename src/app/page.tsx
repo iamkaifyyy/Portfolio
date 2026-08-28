@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { createTimeline, stagger, splitText } from "animejs";
-import { DockDemo } from "@/components/ui/dock-demo";
 import { TextEffect } from "@/components/ui/text-effect";
 import { ProjectsSection } from "@/components/ui/projects-section";
 import { GithubGraph } from "@/components/ui/github-graph";
@@ -15,22 +14,8 @@ import { Sparkles } from "lucide-react";
 export default function Home() {
   const [isFading, setIsFading] = useState(false);
   const [isInitialFlipped, setIsInitialFlipped] = useState(false);
-  const [isAtBottom, setIsAtBottom] = useState(false);
   const hobbiesRef = useRef<HTMLParagraphElement>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const bottomThreshold = 220;
-      const isBottom =
-        window.innerHeight + window.scrollY >=
-        document.documentElement.scrollHeight - bottomThreshold;
-      setIsAtBottom(isBottom);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   useEffect(() => {
     const showGifTimer = setTimeout(() => {
@@ -133,7 +118,6 @@ export default function Home() {
             When I&apos;m not coding, I&apos;m at the gym or immersed in music.
           </p>
 
-          {}
           <div className="mt-4 flex items-center gap-3 flex-wrap">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-100/90 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-300/80 dark:border-emerald-800/80 cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-emerald-200 dark:hover:bg-emerald-900/80 hover:border-emerald-400 hover:shadow-sm group/badge shrink-0">
               <span className="relative flex h-2 w-2">
@@ -147,7 +131,6 @@ export default function Home() {
             </span>
           </div>
 
-          {}
           <div className="mt-10 flex items-center gap-4 flex-wrap">
             <Link
               href="/resume"
@@ -163,7 +146,6 @@ export default function Home() {
             </a>
           </div>
 
-          {}
           <div className="mt-5 flex items-center gap-2.5 flex-wrap">
             <a
               href="https://www.github.com/iamkaifyyy"
@@ -212,14 +194,12 @@ export default function Home() {
           </div>
         </div>
 
-        {}
         <div className="relative group shrink-0 [perspective:1000px]">
           <div
             className={`w-28 h-28 md:w-36 md:h-36 rounded-2xl p-1 bg-gradient-to-tr from-zinc-200 via-zinc-100 to-zinc-300 dark:from-zinc-800 dark:to-zinc-900 shadow-md ring-1 ring-zinc-200 dark:ring-zinc-800 transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] cursor-pointer ${
               isInitialFlipped ? "[transform:rotateY(180deg)]" : ""
             }`}
           >
-            {}
             <div className="absolute inset-1 rounded-xl overflow-hidden bg-white [backface-visibility:hidden]">
               <Image
                 src="/me.jpeg"
@@ -230,7 +210,6 @@ export default function Home() {
               />
             </div>
 
-            {}
             <div className="absolute inset-1 rounded-xl overflow-hidden bg-white [backface-visibility:hidden] [transform:rotateY(180deg)]">
               <Image
                 src="/asta.gif"
@@ -247,18 +226,6 @@ export default function Home() {
       <ProjectsSection />
       <GithubGraph />
       <TechStackSection />
-
-      {/* Dock: Floating while scrolling, sticks above footer when at the bottom */}
-      <div
-        className={`flex justify-center transition-all duration-500 ${
-          isAtBottom
-            ? "relative bottom-0 left-0 translate-x-0 my-4 z-10 opacity-100"
-            : "fixed bottom-6 left-1/2 -translate-x-1/2 z-50 opacity-100"
-        }`}
-      >
-        <DockDemo />
-      </div>
-
       <FooterSection />
     </main>
   );

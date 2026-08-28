@@ -2,8 +2,15 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { OnewaveBadge } from "@/components/ui/onewave-badge";
+import { FloatingDock } from "@/components/ui/floating-dock";
+import { CustomCursor } from "@/components/ui/custom-cursor";
+import { LenisProvider } from "@/components/LenisProvider";
+import { ScrollProgress } from "@/components/ui/scroll-progress";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,10 +33,6 @@ export const metadata: Metadata = {
   },
 };
 
-import { CustomCursor } from "@/components/ui/custom-cursor";
-import { LenisProvider } from "@/components/LenisProvider";
-import { ScrollProgress } from "@/components/ui/scroll-progress";
-
 export default function RootLayout({
   children,
 }: {
@@ -38,14 +41,25 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
     >
-      <body className="min-h-full flex flex-col bg-white text-zinc-900">
-        <LenisProvider>
-          <ScrollProgress />
-          <CustomCursor />
-          {children}
-        </LenisProvider>
+      <body className="min-h-full flex flex-col">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <LenisProvider>
+            <ScrollProgress />
+            <OnewaveBadge />
+            <ThemeToggle />
+            <CustomCursor />
+            {children}
+            <FloatingDock />
+          </LenisProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
