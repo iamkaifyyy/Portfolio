@@ -67,9 +67,9 @@ const SOCIAL_ITEMS = [
 
 export function FloatingDock() {
   return (
-    <div className="fixed bottom-6 inset-x-0 mx-auto w-max z-40">
+    <div className="fixed bottom-4 sm:bottom-6 inset-x-0 mx-auto w-max max-w-[calc(100vw-1rem)] z-40 px-2">
       <TooltipProvider>
-        <Dock direction="middle" className="border border-zinc-200/80 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-900/80 shadow-2xl backdrop-blur-md">
+        <Dock direction="middle" className="border border-zinc-200/80 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-900/80 shadow-2xl backdrop-blur-md max-w-full overflow-x-auto hide-scrollbar px-2 py-1 sm:px-3 sm:py-2">
           {NAV_ITEMS.map((item) => (
             <DockIcon key={item.label}>
               <Tooltip>

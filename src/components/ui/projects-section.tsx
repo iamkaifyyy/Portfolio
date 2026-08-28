@@ -70,11 +70,11 @@ function ProjectVideo({ src }: { src: string }) {
             playsInline
             onLoadedMetadata={applySlowPlayback}
             onLoadedData={applySlowPlayback}
-            className="aspect-video h-[50vh] w-full rounded-xl md:h-[70vh] object-cover"
+            className="aspect-video h-[40vh] sm:h-[60vh] md:h-[70vh] w-full rounded-xl object-cover"
           />
         </MorphingDialogContent>
         <MorphingDialogClose
-          className="fixed top-6 right-6 h-fit w-fit rounded-full bg-white dark:bg-zinc-800 p-2 shadow-lg hover:scale-110 active:scale-95 transition-transform border border-zinc-200 dark:border-zinc-700"
+          className="fixed top-4 right-4 sm:top-6 sm:right-6 z-50 h-fit w-fit rounded-full bg-white dark:bg-zinc-800 p-2 shadow-lg hover:scale-110 active:scale-95 transition-transform border border-zinc-200 dark:border-zinc-700"
           variants={{
             initial: { opacity: 0, scale: 0.8 },
             animate: {
@@ -123,11 +123,11 @@ function ProjectImage({ src }: { src: string }) {
           <img
             src={src}
             alt="Project Showcase"
-            className="aspect-video h-[50vh] w-full rounded-xl md:h-[70vh] object-contain bg-black"
+            className="aspect-video h-[40vh] sm:h-[60vh] md:h-[70vh] w-full rounded-xl object-contain bg-black"
           />
         </MorphingDialogContent>
         <MorphingDialogClose
-          className="fixed top-6 right-6 h-fit w-fit rounded-full bg-white dark:bg-zinc-800 p-2 shadow-lg hover:scale-110 active:scale-95 transition-transform border border-zinc-200 dark:border-zinc-700"
+          className="fixed top-4 right-4 sm:top-6 sm:right-6 z-50 h-fit w-fit rounded-full bg-white dark:bg-zinc-800 p-2 shadow-lg hover:scale-110 active:scale-95 transition-transform border border-zinc-200 dark:border-zinc-700"
           variants={{
             initial: { opacity: 0, scale: 0.8 },
             animate: {
@@ -153,7 +153,7 @@ export function ProjectsSection() {
   const [activeTab, setActiveTab] = useState<'projects' | 'design'>('projects')
 
   return (
-    <section className="w-full max-w-xl mx-auto px-4 md:px-0">
+    <section className="w-full max-w-2xl mx-auto px-0 sm:px-4">
       {/* Category Tab Buttons */}
       <div className="flex justify-center gap-8 mb-6">
         <button
