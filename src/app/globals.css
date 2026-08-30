@@ -13,6 +13,36 @@ body {
   max-width: 100vw;
 }
 
+/* Hide scrollbar utility */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Circular View Transition for Theme Toggle */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 9999;
+}
+::view-transition-new(root) {
+  z-index: 1;
+}
+.dark::view-transition-old(root) {
+  z-index: 1;
+}
+.dark::view-transition-new(root) {
+  z-index: 9999;
+}
+
 html {
   color-scheme: light;
   background-color: #ffffff;
