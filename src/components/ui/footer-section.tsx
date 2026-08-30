@@ -5,39 +5,39 @@ import { motion, AnimatePresence } from "motion/react";
 import { ArrowUp, Sparkles, Sun, Moon } from "lucide-react";
 import { VisitorCounter } from "@/components/ui/visitor-counter";
 
+import { useTheme } from "next-themes";
+import { toggleThemeWithTransition } from "@/lib/theme-transition";
+
 const TEXTS = [
   "Crafted with Next.js & Tailwind CSS",
   `© ${new Date().getFullYear()} Kaify. All rights reserved.`,
 ];
 
-function getInitialDark(): boolean {
-  if (typeof window === "undefined") return false;
-  return document.documentElement.classList.contains("dark");
-}
-
 export function FooterSection() {
-  const [isDark, setIsDark] = useState<boolean>(getInitialDark);
+  const { theme, resolvedTheme, setTheme } = useTheme();
   const [textIndex, setTextIndex] = useState(0);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const interval = setInterval(() => {
       setTextIndex((prev) => (prev + 1) % TEXTS.length);
     }, 3500);
     return () => clearInterval(interval);
   }, []);
 
+  const isDark = mounted ? (resolvedTheme || theme) === "dark" : false;
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const setLight = () => {
-    document.documentElement.classList.remove("dark");
-    setIsDark(false);
+  const handleSetLight = (e: React.MouseEvent<HTMLButtonElement>) => {
+    toggleThemeWithTransition(e, "light", setTheme);
   };
 
-  const setDark = () => {
-    document.documentElement.classList.add("dark");
-    setIsDark(true);
+  const handleSetDark = (e: React.MouseEvent<HTMLButtonElement>) => {
+    toggleThemeWithTransition(e, "dark", setTheme);
   };
 
   return (
@@ -122,7 +122,7 @@ export function FooterSection() {
         {/* Sun + Moon side by side */}
         <div className="flex items-center gap-1 p-1 rounded-full border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900">
           <button
-            onClick={setLight}
+            onClick={handleSetLight}
             aria-label="Light mode"
             className={`flex items-center justify-center w-6 h-6 rounded-full transition-all duration-200 cursor-pointer ${
               !isDark
@@ -139,7 +139,7 @@ export function FooterSection() {
           </button>
 
           <button
-            onClick={setDark}
+            onClick={handleSetDark}
             aria-label="Dark mode"
             className={`flex items-center justify-center w-6 h-6 rounded-full transition-all duration-200 cursor-pointer ${
               isDark

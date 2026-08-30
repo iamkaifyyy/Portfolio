@@ -3,6 +3,7 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Sun, Moon } from "lucide-react";
+import { toggleThemeWithTransition } from "@/lib/theme-transition";
 
 export function ThemeToggle() {
   const { theme, resolvedTheme, setTheme } = useTheme();
@@ -20,9 +21,14 @@ export function ThemeToggle() {
 
   const isDark = (resolvedTheme || theme) === "dark";
 
+  const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const nextTheme = isDark ? "light" : "dark";
+    toggleThemeWithTransition(e, nextTheme, setTheme);
+  };
+
   return (
     <button
-      onClick={() => setTheme(isDark ? "light" : "dark")}
+      onClick={handleToggle}
       className="fixed top-4 right-4 sm:top-6 sm:right-6 z-50 p-2 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors cursor-pointer focus:outline-hidden"
       aria-label="Toggle theme"
       title={isDark ? "Switch to light mode" : "Switch to dark mode"}
