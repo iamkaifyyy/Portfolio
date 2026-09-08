@@ -25,7 +25,7 @@ export default function ResumePage() {
           <div className="flex items-center gap-2 sm:gap-2.5">
             <Magnetic intensity={0.25}>
               <a
-                href="/kaify.pdf"
+                href="/kaifyResume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-2.5 sm:px-3 py-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/80 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors text-xs font-medium inline-flex items-center gap-1.5 cursor-pointer"
@@ -37,7 +37,7 @@ export default function ResumePage() {
 
             <Magnetic intensity={0.35}>
               <a
-                href="/kaify.pdf"
+                href="/kaifyResume.pdf"
                 download="Kaify_Resume.pdf"
                 className="px-3 sm:px-4 py-1.5 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-xl text-xs md:text-sm font-semibold inline-flex items-center gap-1.5 sm:gap-2 hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all shadow-xs hover:scale-105 active:scale-95 cursor-pointer"
               >
